@@ -1,0 +1,6 @@
+product: "BPDM Certificate Management"
+leadingRepository: "https://github.com/eclipse-tractusx/bpdm-certificate-management"
+repositories:
+  - name: "BPDM Certificate Management"
+    usage: "Mono-Repository for the Bpdm Certificate Management services"
+    url: "https://github.com/eclipse-tractusx/bpdm-certificate-management"
