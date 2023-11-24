@@ -29,14 +29,16 @@
     </parent>
 
     <groupId>org.eclipse.tractusx</groupId>
-    <artifactId>bdpm-certificate-management</artifactId>
+    <artifactId>bpdm-certificate-management</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>bdpm-certificate-management</name>
-    <description>bdpm-certificate-management</description>
+    <name>bpdm-certificate-management</name>
+    <description>bpdm-certificate-management</description>
 
     <properties>
         <java.version>17</java.version>
         <kotlin.version>1.8.22</kotlin.version>
+        <springdoc.version>2.0.0</springdoc.version>
+        <kotlinlogging.version>2.1.23</kotlinlogging.version>
     </properties>
 
     <dependencies>
@@ -94,12 +96,6 @@
             <artifactId>jackson-databind-nullable</artifactId>
             <version>0.2.6</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter -->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
-            <version>3.0.0</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api -->
         <dependency>
             <groupId>javax.annotation</groupId>
@@ -112,6 +108,27 @@
             <artifactId>javax.servlet-api</artifactId>
             <version>4.0.1</version>
             <scope>provided</scope>
+        </dependency>
+        <!-- Kotlin wrapper for slf4j (Logging)-->
+        <dependency>
+            <groupId>io.github.microutils</groupId>
+            <artifactId>kotlin-logging-jvm</artifactId>
+            <version>${kotlinlogging.version}</version>
+        </dependency>
+        <!-- OpenAPI 3 auto API documentation library for Spring Boot -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-common</artifactId>
+            <version>${springdoc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
     </dependencies>
 
@@ -126,6 +143,9 @@
     </pluginRepositories>
 
     <build>
+        <!-- Name jar without version to make it easier to reference it during CI/CD -->
+        <finalName>bpdm-certificate-management</finalName>
+
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
         <plugins>
@@ -171,10 +191,10 @@
                             <inputSpec>${project.basedir}/src/main/resources/static/BpdmCertificate.yaml</inputSpec>
                             <generatorName>kotlin-spring</generatorName>
                             <configOptions>
-                                <basePackage>org.eclipse.tractusx.bdpmcertificatemanagement</basePackage>
-                                <apiPackage>org.eclipse.tractusx.bdpmcertificatemanagement.controller</apiPackage>
-                                <modelPackage>org.eclipse.tractusx.bdpmcertificatemanagement.model</modelPackage>
-                                <configPackage>org.eclipse.tractusx.bdpmcertificatemanagement.config</configPackage>
+                                <basePackage>org.eclipse.tractusx.bpdmcertificatemanagement</basePackage>
+                                <apiPackage>org.eclipse.tractusx.bpdmcertificatemanagement.controller</apiPackage>
+                                <modelPackage>org.eclipse.tractusx.bpdmcertificatemanagement.model</modelPackage>
+                                <configPackage>org.eclipse.tractusx.bpdmcertificatemanagement.config</configPackage>
                                 <delegatePattern>true</delegatePattern>
                                 <interfaceOnly>false</interfaceOnly>
                                 <modelNameSuffix>Dto</modelNameSuffix>

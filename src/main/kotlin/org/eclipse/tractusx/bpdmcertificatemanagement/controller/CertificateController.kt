@@ -16,16 +16,21 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
-package org.eclipse.tractusx.bdpmcertificatemanagement
 
-import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
+package org.eclipse.tractusx.bpdmcertificatemanagement.controller
 
-@SpringBootTest
-class ApplicationTests {
+import org.springframework.http.MediaType
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
-    @Test
-    fun contextLoads() {
-    }
+@RestController
+@RequestMapping("api/catena/certificate", produces = [MediaType.APPLICATION_JSON_VALUE])
+class CertificateController {
 
+    @GetMapping("/{bpn}")
+    fun getCertificateWelcome(
+        @PathVariable bpn: String
+    ) = "Hello, you requested for certificate $bpn!!"
 }
