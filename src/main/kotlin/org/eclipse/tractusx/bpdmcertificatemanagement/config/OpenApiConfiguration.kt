@@ -17,20 +17,23 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.eclipse.tractusx.bdpmcertificatemanagement.controller
+package org.eclipse.tractusx.bpdmcertificatemanagement.config
 
-import org.springframework.http.MediaType
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import io.swagger.v3.oas.models.OpenAPI
+import io.swagger.v3.oas.models.info.Info
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 
-@RestController
-@RequestMapping("api/catena/certificate", produces = [MediaType.APPLICATION_JSON_VALUE])
-class CertificateController {
-
-    @GetMapping("/{bpn}")
-    fun getCertificateWelcome(
-        @PathVariable bpn: String
-    ) = "Hello, you requested for certificate $bpn!!"
+@Configuration
+class OpenApiConfiguration {
+    @Bean
+    fun apiInfo(): OpenAPI {
+        return OpenAPI()
+            .info(
+                Info()
+                    .title("BPDM Certificate Management")
+                    .description("Service that manages and shares business partner certificates")
+                    .version("0.0.1")
+            )
+    }
 }
