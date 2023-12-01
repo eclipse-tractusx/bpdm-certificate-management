@@ -1,5 +1,5 @@
 FROM maven:3.8.7-eclipse-temurin-17 AS build
-COPY ../../ /home/app
+COPY . /home/app
 WORKDIR /home/app
 RUN mvn clean package -DskipTests
 
