@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="bdpm-certificate-management" />
+        <module name="bpdm-certificate-management" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="bpdm-certificate-management" target="17" />
+      <module name="bdpm-certificate-management" target="17" />
       <module name="bpdm-certificate-management-parent" target="17" />
     </bytecodeTargetLevel>
   </component>
