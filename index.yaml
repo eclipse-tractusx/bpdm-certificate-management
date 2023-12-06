@@ -1,0 +1,19 @@
+apiVersion: v1
+entries:
+  bpdm-certificate-management:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2023-12-06T06:12:16.982401898Z"
+    description: A Helm chart for deploying the BPDM Certificate Management application
+    digest: 5e4b98a19ec56b9a0043c7df50d519dd0295de904bd08308567e8ad77d52879e
+    maintainers:
+    - name: Sujit Karne
+    - name: Nico Koprowski
+    name: bpdm-certificate-management
+    sources:
+    - https://github.com/eclipse-tractusx/bpdm-certificate-management
+    type: application
+    urls:
+    - https://github.com/eclipse-tractusx/bpdm-certificate-management/releases/download/bpdm-certificate-management-0.0.1-alpha.1/bpdm-certificate-management-0.0.1-alpha.1.tgz
+    version: 0.0.1-alpha.1
+generated: "2023-12-06T06:12:16.982412578Z"
