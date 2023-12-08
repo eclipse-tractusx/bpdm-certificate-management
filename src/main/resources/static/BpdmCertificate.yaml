@@ -16,71 +16,450 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 ################################################################################
-openapi: "3.0.2"
+openapi: 3.0.2
 info:
   title: BPDM Certificate Management
   description: Service that manages and shares business partner certificates
-  version: "0.0.1"
+  version: v1.0.0
 servers:
-  - url: https://localhost:8080
+  - url: https://localhost:8086
+    description: Generated server url
 paths:
-  /api/catena/certificate:
+  /api/catena/certificate/{bpn}:
+    get:
+      tags:
+        - certificate-controller
+      summary: Get all certificates of a given BPN.
+      description: "This endpoint retrieves all certificates available for the BPN are returned. In case of BPNL,  all certificates available for the BPN are returned. In case of a BPNS, all certificates which either are assigned to the BPNS or the matching BPNL enclosing BPNS are returned."
+      operationId: getCertificatesPaginated
+      parameters:
+        - name: bpn
+          in: path
+          description: "BPN value, It can be BPNL, BPNS, BPNA"
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          description: Number of page to get results from
+          required: false
+          style: form
+          explode: true
+          schema:
+            minimum: 0
+            type: string
+            default: "0"
+        - name: size
+          in: query
+          description: Size of each page
+          required: false
+          style: form
+          explode: true
+          schema:
+            maximum: 100
+            minimum: 0
+            type: string
+            default: "10"
+      responses:
+        "200":
+          description: "Page of business partners matching the search criteria, may be empty"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageDtoCertificateDto'
+        "400":
+          description: On malformed pagination request
+  /api/catena/certificate/{bpn}/{certificateType}:
+    get:
+      tags:
+        - certificate-controller
+      summary: Get a specific certificate by certificate type for of a given BPN.
+      description: This endpoint retrieves certificate based on certificate type for provided business partner number.
+      operationId: getCertificateByType
+      parameters:
+        - name: bpn
+          in: path
+          description: "BPN value, It can be BPNL, BPNS, BPNA"
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: certificateType
+          in: path
+          description: Certificate type e.g. IATF-16949
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Certificate for business partner, can be the case where provided bpn could not be found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateDto'
+        "400":
+          description: On malformed request
+        "404":
+          description: Business Partner Number not found
+  /api/catena/certificate/simple/{bpn}/{certificateType}:
+    get:
+      tags:
+        - certificate-controller
+      summary: Gets info whether BPN is certified for a specific certificate type..
+      description: This endpoint checks whether a provided BPN is certified for a specific certificate type.
+      operationId: getCheckCertifiedBpn
+      parameters:
+        - name: bpn
+          in: path
+          description: "BPN value, It can be BPNL, BPNS, BPNA"
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: certificateType
+          in: path
+          description: Certificate type e.g. IATF-16949
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "Certificate for business partner, can be the case where provided bpn could not be found"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateCheckDto'
+        "400":
+          description: On malformed request
+        "404":
+          description: Business Partner Number not found
+  /api/catena/certificate/document/{cdID}:
+    get:
+      tags:
+        - document-controller
+      summary: Request a specific certificate document for a given BPN.
+      description: This endpoint call to request a specific certificate document for a given BPN.
+      operationId: getCertificateDocument
+      parameters:
+        - name: cdID
+          in: path
+          description: The internal certificate document ID
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Document for the given ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateDocumentResponseDto'
+        "400":
+          description: Malformed URL
+        "401":
+          description: Unauthorized
+        "404":
+          description: cdID not found
+        "406":
+          description: Document not available
+  /api/catena/certificate/document:
     post:
       tags:
-        - Certificate Controller
-      summary: Create Certificate
-      operationId: createCertificate
+        - document-controller
+      summary: Provide a specific certificate document for a given BPN.
+      description: Use this API call to provide a specific certificate document for a given BPN.
+      operationId: setCertificateDocument
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Certificate'
+              $ref: '#/components/schemas/CertificateDocumentRequestDto'
+        required: true
       responses:
-        '200':
-          description: OK
+        "200":
+          description: Document for the given ID
           content:
-            'application/json':
+            application/json:
               schema:
-                $ref: '#/components/schemas/CertificateFullData'
-  /api/catena/certificate/{bpn}:
+                $ref: '#/components/schemas/CertificateDocumentResponseDto'
+        "400":
+          description: Malformed URL
+        "401":
+          description: Unauthorized
+        "404":
+          description: BPN not found
+        "406":
+          description: Document not available
+        "503":
+          description: Service not available
+  /api/catena/certificate-types:
     get:
       tags:
-        - Certificate Controller
-      summary: Retrieve Certificate
-      operationId: getCertificate
+        - metadata-controller
+      summary: Get certificate types
+      description: Get a list of all currently registered certificate types.
+      operationId: getCertificateTypes
       parameters:
-        - name: bpn
-          in: path
-          required: true
+        - name: page
+          in: query
+          description: Page of paged answer (0..n)
+          required: false
+          style: form
+          explode: true
           schema:
             type: string
+        - name: size
+          in: query
+          description: "Page size of paged answer, default is 10"
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+            default: "10"
       responses:
-        '200':
-          description: OK
+        "200":
+          description: List of registered certificate types
           content:
-            'application/json':
+            application/json:
               schema:
-                $ref: '#/components/schemas/CertificateFullData'
-        '404':
-          description: NOT FOUND
+                $ref: '#/components/schemas/PageDtoCertificateTypesDto'
+        "400":
+          description: Malformed URL
+    post:
+      tags:
+        - metadata-controller
+      summary: Register a new certificate type
+      description: Register a new certificate type.
+      operationId: setCertificateType
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CertificateTypeDto'
+        required: true
+      responses:
+        "200":
+          description: Successfully created
+        "400":
+          description: Malformed URL
+        "409":
+          description: Type already exists
 components:
   schemas:
-    Certificate:
+    PageDtoCertificateDto:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          description: Total number of all results in all pages
+          format: int64
+        totalPages:
+          type: integer
+          description: Total number pages
+          format: int32
+        page:
+          type: integer
+          description: Current page number
+          format: int32
+        contentSize:
+          type: integer
+          description: Number of results in the page
+          format: int32
+        content:
+          type: array
+          description: Collection of results in the page
+          items:
+            $ref: '#/components/schemas/CertificateDto'
+      description: Paginated collection of results
+    CertificateDto:
+      type: object
+      properties:
+        businessPartnerNumber:
+          type: string
+          description: The business partner number
+        type:
+          $ref: '#/components/schemas/CertificateTypeDto'
+        registrationNumber:
+          type: string
+        areaOfApplication:
+          type: string
+        remark:
+          type: string
+          description: The certificate remark (can be a string or null)
+          nullable: true
+        enclosedSites:
+          type: array
+          items:
+            $ref: '#/components/schemas/EnclosedSiteDto'
+        validFrom:
+          type: string
+          format: date-time
+        validUntil:
+          type: string
+          format: date-time
+        issuer:
+          type: string
+        trustLevel:
+          type: string
+        validator:
+          $ref: '#/components/schemas/TrustValidatorDto'
+        uploader:
+          type: string
+        documentID:
+          type: string
+    CertificateTypeDto:
       type: object
       properties:
         certificateType:
           type: string
-          description: Type of the certificate
         certificateVersion:
           type: string
-          description: Version of the certificate
-    CertificateFullData:
-      allOf:
-        - $ref: '#/components/schemas/Certificate'
-        - type: object
-          properties:
-            certificateId:
-              type: integer
-              description: The ID of the certificate
-              format: int64
-      description: Full data of the certificate.
+      description: The certificates type and version for mentioned business partner
+    EnclosedSiteDto:
+      type: object
+      properties:
+        siteBPN:
+          type: string
+        areaOfApplication:
+          type: string
+    TrustValidatorDto:
+      type: object
+      properties:
+        validatorName:
+          type: string
+        validatorBPN:
+          type: string
+    CertificateDocumentDto:
+      type: object
+      properties:
+        certificateDocument:
+          type: string
+          description: Base64-encoded file contents
+          format: byte
+        certificateDocumentFormat:
+          type: string
+          description: "One of the Document format from options (PDF, PNG, JPG)"
+          enum:
+            - PDF
+            - PNG
+            - JPG
+    CertificateCheckDto:
+      type: object
+      properties:
+        businessPartnerBPN:
+          type: string
+          description: The business partner BPN
+        isCertified:
+          type: boolean
+          description: Indicates if the entity is certified for the specified certificate type
+        certificateValidUntil:
+          type: string
+          description: The date until which the certificate is valid
+          format: date-time
+        certificateTrustLevel:
+          type: string
+          description: The trust level of the certificate
+        certificateType:
+          $ref: '#/components/schemas/CertificateTypeDto'
+    CertificateDocumentResponseDto:
+      type: object
+      properties:
+        businessPartnerNumber:
+          type: string
+          description: The business partner number
+        type:
+          $ref: '#/components/schemas/CertificateTypeDto'
+        registrationNumber:
+          type: string
+        areaOfApplication:
+          type: string
+        remark:
+          type: string
+          description: The certificate remark (can be a string or null)
+          nullable: true
+        enclosedSites:
+          type: array
+          items:
+            $ref: '#/components/schemas/EnclosedSiteDto'
+        validFrom:
+          type: string
+          format: date-time
+        validUntil:
+          type: string
+          format: date-time
+        issuer:
+          type: string
+        trustLevel:
+          type: string
+        validator:
+          $ref: '#/components/schemas/TrustValidatorDto'
+        uploader:
+          type: string
+        document:
+          $ref: '#/components/schemas/CertificateDocumentDto'
+    CertificateDocumentRequestDto:
+      type: object
+      properties:
+        businessPartnerNumber:
+          type: string
+          description: The business partner number
+        type:
+          $ref: '#/components/schemas/CertificateTypeDto'
+        registrationNumber:
+          type: string
+        areaOfApplication:
+          type: string
+        remark:
+          type: string
+          description: The certificate remark (can be a string or null)
+          nullable: true
+        enclosedSites:
+          type: array
+          items:
+            $ref: '#/components/schemas/EnclosedSiteDto'
+        validFrom:
+          type: string
+          format: date-time
+        validUntil:
+          type: string
+          format: date-time
+        issuer:
+          type: string
+        trustLevel:
+          type: string
+        validator:
+          $ref: '#/components/schemas/TrustValidatorDto'
+        uploader:
+          type: string
+        document:
+          $ref: '#/components/schemas/CertificateDocumentDto'
+    PageDtoCertificateTypesDto:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          description: Total number of all results in all pages
+          format: int64
+        page:
+          type: integer
+          description: Current page
+          format: int32
+        contentSize:
+          type: integer
+          description: Size of the page
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/CertificateTypeDto'
