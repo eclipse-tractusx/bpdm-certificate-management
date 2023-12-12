@@ -17,14 +17,16 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.eclipse.tractusx.bpdmcertificatemanagement.repository
+package org.eclipse.tractusx.bpdmcertificatemanagement.entity
 
-import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateTypeDB
-import org.springframework.data.repository.CrudRepository
-import org.springframework.data.repository.PagingAndSortingRepository
+import jakarta.persistence.Column
+import jakarta.persistence.Embeddable
 
-interface CertificateTypeRepository:PagingAndSortingRepository<CertificateTypeDB, Long>,CrudRepository<CertificateTypeDB, Long>{
-    fun findByCertificateType(key: String): CertificateTypeDB?
+@Embeddable
+class TrustValidatorDB (
+    @Column(name = "validator_name")
+    val validatorName: String,
 
-    fun findByCertificateTypeAndCertificateVersion(certificateType: String, certificateVersion: String): CertificateTypeDB?
-}
+    @Column(name = "validator_bpn")
+    val validatorBpn: String
+)

@@ -17,14 +17,25 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.eclipse.tractusx.bpdmcertificatemanagement.repository
+package org.eclipse.tractusx.bpdmcertificatemanagement.entity
 
-import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateTypeDB
-import org.springframework.data.repository.CrudRepository
-import org.springframework.data.repository.PagingAndSortingRepository
+import jakarta.persistence.Column
+import jakarta.persistence.Embeddable
 
-interface CertificateTypeRepository:PagingAndSortingRepository<CertificateTypeDB, Long>,CrudRepository<CertificateTypeDB, Long>{
-    fun findByCertificateType(key: String): CertificateTypeDB?
+@Embeddable
+data class EnclosedSiteDB(
 
-    fun findByCertificateTypeAndCertificateVersion(certificateType: String, certificateVersion: String): CertificateTypeDB?
+    @Column(name = "site_bpn")
+    val siteBpn: String,
+
+    @Column(name = "area_of_application")
+    val areaOfApplication: String
+
+): Comparable<EnclosedSiteDB> {
+
+    //  Natural order by "site_bpm", "area_Of_Application"
+    override fun compareTo(other: EnclosedSiteDB) = compareBy(
+        EnclosedSiteDB::siteBpn,
+        EnclosedSiteDB::areaOfApplication,
+    ).compare(this, other)
 }

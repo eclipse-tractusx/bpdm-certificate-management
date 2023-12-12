@@ -17,14 +17,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.eclipse.tractusx.bpdmcertificatemanagement.repository
+package org.eclipse.tractusx.bpdmcertificatemanagement.exception
 
-import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateTypeDB
-import org.springframework.data.repository.CrudRepository
-import org.springframework.data.repository.PagingAndSortingRepository
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.ResponseStatus
 
-interface CertificateTypeRepository:PagingAndSortingRepository<CertificateTypeDB, Long>,CrudRepository<CertificateTypeDB, Long>{
-    fun findByCertificateType(key: String): CertificateTypeDB?
-
-    fun findByCertificateTypeAndCertificateVersion(certificateType: String, certificateVersion: String): CertificateTypeDB?
-}
+@ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+class CertificateTypeNotExists(
+    objectType: String,
+    identifier: String
+):RuntimeException("$objectType with the following certificate type doesn't exists: $identifier")
