@@ -63,14 +63,18 @@
             <artifactId>kotlin-stdlib</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations -->
         <dependency>
@@ -167,12 +171,19 @@
                     </args>
                     <compilerPlugins>
                         <plugin>spring</plugin>
+                        <plugin>jpa</plugin>
                     </compilerPlugins>
+                    <jvmTarget>17</jvmTarget>
                 </configuration>
                 <dependencies>
                     <dependency>
                         <groupId>org.jetbrains.kotlin</groupId>
                         <artifactId>kotlin-maven-allopen</artifactId>
+                        <version>${kotlin.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-maven-noarg</artifactId>
                         <version>${kotlin.version}</version>
                     </dependency>
                 </dependencies>
@@ -190,15 +201,6 @@
                         <configuration>
                             <inputSpec>${project.basedir}/src/main/resources/static/BpdmCertificate.yaml</inputSpec>
                             <generatorName>kotlin-spring</generatorName>
-                            <configOptions>
-                                <basePackage>org.eclipse.tractusx.bpdmcertificatemanagement</basePackage>
-                                <apiPackage>org.eclipse.tractusx.bpdmcertificatemanagement.controller</apiPackage>
-                                <modelPackage>org.eclipse.tractusx.bpdmcertificatemanagement.model</modelPackage>
-                                <configPackage>org.eclipse.tractusx.bpdmcertificatemanagement.config</configPackage>
-                                <delegatePattern>true</delegatePattern>
-                                <interfaceOnly>false</interfaceOnly>
-                                <modelNameSuffix>Dto</modelNameSuffix>
-                            </configOptions>
                         </configuration>
                     </execution>
                 </executions>

@@ -16,24 +16,26 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 ################################################################################
-##
-#Springdoc swagger configuration
-springdoc.api-docs.enabled=true
-springdoc.api-docs.path=/docs/api-docs
-springdoc.swagger-ui.disable-swagger-default-url=true
-springdoc.swagger-ui.path=/ui/swagger-ui
-springdoc.swagger-ui.show-common-extensions=true
-##
-# Change default port
-server.port=8086
-##
-#Enable actuator endpoints
-management.endpoint.health.probes.enabled=true
-management.health.livenessState.enabled=true
-management.health.readinessState.enabled=true
-##
-spring.datasource.url=jdbc:postgresql://localhost:5432/bpdm_certificates
-spring.datasource.driverClassName=org.postgresql.Driver
-spring.datasource.username=bpdm_certificates
-spring.datasource.password=
-spring.jpa.hibernate.ddl-auto=update
+## In order to run bpdm-certificate-management with profile `local` for development purposes
+services:
+  postgres:
+    image: postgres:14.2
+    container_name: bpdm-certificate-postgres
+    environment:
+      POSTGRES_USER: bpdm_certificates
+      POSTGRES_PASSWORD:
+      POSTGRES_DB: bpdm_certificates
+      POSTGRES_HOST_AUTH_METHOD: trust
+    healthcheck:
+      test: [ 'CMD-SHELL', 'pg_isready -U bpdm_certificates' ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432:5432"
+    volumes:
+      - bpdm-certificate-postgres-data:/var/lib/postgresql/data
+
+volumes:
+  bpdm-certificate-postgres-data:
+    name: bpdm-certificate-postgres-data
