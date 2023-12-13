@@ -24,8 +24,10 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.PagingAndSortingRepository
+import java.util.*
 
 interface CertificateRepository: PagingAndSortingRepository<CertificateDB, Long>, CrudRepository<CertificateDB, Long> {
+
     fun findByBusinessPartnerNumber(key: String, pageable: Pageable): Page<CertificateDB>
 
     fun findByEnclosedSitesSiteBpn(siteBpn: String, pageable: Pageable): Page<CertificateDB>
@@ -33,5 +35,7 @@ interface CertificateRepository: PagingAndSortingRepository<CertificateDB, Long>
     fun findByBusinessPartnerNumberAndTypeCertificateType(bpn: String, certificateType: String, pageable: Pageable): Page<CertificateDB>
 
     fun findByEnclosedSitesSiteBpnAndTypeCertificateType(siteBpn: String, certificateType: String, pageable: Pageable): Page<CertificateDB>
+
+    fun findByDocumentID(id: UUID): CertificateDB?
 }
 

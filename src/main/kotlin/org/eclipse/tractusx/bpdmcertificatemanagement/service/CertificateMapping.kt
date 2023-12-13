@@ -20,15 +20,13 @@
 package org.eclipse.tractusx.bpdmcertificatemanagement.service
 
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.CertificateTypeDto
+import org.eclipse.tractusx.bpdmcertificatemanagement.dto.DocumentDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.EnclosedSiteDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.TrustValidatorDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.request.CertificateDocumentRequestDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateDocumentResponseDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateResponseDto
-import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateDB
-import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateTypeDB
-import org.eclipse.tractusx.bpdmcertificatemanagement.entity.EnclosedSiteDB
-import org.eclipse.tractusx.bpdmcertificatemanagement.entity.TrustValidatorDB
+import org.eclipse.tractusx.bpdmcertificatemanagement.entity.*
 import org.springframework.stereotype.Service
 import java.time.ZonedDateTime
 
@@ -48,15 +46,10 @@ class CertificateMapping {
             issuer = dto.issuer,
             trustLevel = dto.trustLevel,
             validator = dto.validator?.let { toTrustValidatorDB(it) },
-            uploader = dto.uploader
+            uploader = dto.uploader,
+            document = toDocumentDB(dto.document)
         )
     }
-
-    private fun toCertificateTypeDB(dto: CertificateTypeDto) =
-        CertificateTypeDB(
-            certificateType = dto.certificateType,
-            certificateVersion = dto.certificateVersion
-        )
 
     private fun toEnclosedSitesDB(dto: EnclosedSiteDto) =
         EnclosedSiteDB(
@@ -73,6 +66,12 @@ class CertificateMapping {
         }
     }
 
+    private fun toDocumentDB(dto: DocumentDto) =
+        DocumentDB(
+            certificateDocument = dto.certificateDocument,
+            certificateDocumentFormat = dto.certificateDocumentFormat,
+        )
+
     fun toCertificateDocumentResponseDto(entity: CertificateDB): CertificateDocumentResponseDto {
         return CertificateDocumentResponseDto(
             businessPartnerNumber = entity.businessPartnerNumber,
@@ -87,6 +86,8 @@ class CertificateMapping {
             trustLevel = entity.trustLevel,
             validator = entity.validator?.let { toTrustValidatorDto(it) },
             uploader = entity.uploader,
+            documentID = entity.documentID,
+            document = toDocumentDto(entity.document),
             createdAt = entity.createdAt,
             updatedAt = entity.updatedAt
         )
@@ -142,5 +143,11 @@ class CertificateMapping {
             return ZonedDateTime.now()
         return dateTime
     }
+
+    private fun toDocumentDto(entity: DocumentDB): DocumentDto =
+        DocumentDto(
+            certificateDocument = entity.certificateDocument,
+            certificateDocumentFormat = entity.certificateDocumentFormat,
+        )
 
 }

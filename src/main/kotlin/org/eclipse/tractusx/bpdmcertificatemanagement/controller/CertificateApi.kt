@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.service.annotation.GetExchange
 import org.springframework.web.service.annotation.HttpExchange
 import org.springframework.web.service.annotation.PostExchange
+import java.util.*
 
 @RequestMapping("/api/catena", produces = [MediaType.APPLICATION_JSON_VALUE])
 @HttpExchange("/api/catena")
@@ -55,7 +56,26 @@ interface CertificateApi {
     )
     @PostMapping("/certificate/document")
     @PostExchange("/certificate/document")
-    fun setCertificateDocument(@RequestBody certificateDocumentRequestDto: CertificateDocumentRequestDto):ResponseEntity<CertificateDocumentResponseDto>
+    fun setCertificateDocument(@RequestBody certificateDocumentRequestDto: CertificateDocumentRequestDto): ResponseEntity<CertificateDocumentResponseDto>
+
+
+    @Operation(
+        summary = "Request a specific certificate document for a given BPN.",
+        operationId = "retrieveCertificateDocument",
+        description = "This endpoint call to request a specific certificate document for a given BPN.",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Document for the given id"),
+            ApiResponse(responseCode = "400", description = "Malformed URL", content = [Content()]),
+            ApiResponse(responseCode = "401", description = "Unauthorized", content = [Content()]),
+            ApiResponse(responseCode = "404", description = "Certificate Document ID not found", content = [Content()]),
+            ApiResponse(responseCode = "406", description = "Document not available", content = [Content()]),
+            ApiResponse(responseCode = "503", description = "Service not available", content = [Content()])
+        ]
+    )
+    @GetMapping("/certificate/document/{cdID}")
+    @GetExchange("/certificate/document/{cdID}")
+    fun getCertificateDocument(@Parameter(description = "Certificate document ID") @PathVariable cdID: UUID): ResponseEntity<CertificateDocumentResponseDto>
+
 
     @Operation(
         summary = "Get all certificates of a given BPN.",

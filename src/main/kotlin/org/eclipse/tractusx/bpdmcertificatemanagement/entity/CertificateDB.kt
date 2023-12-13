@@ -22,6 +22,7 @@ package org.eclipse.tractusx.bpdmcertificatemanagement.entity
 import jakarta.persistence.*
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.TrustLevelType
 import java.time.ZonedDateTime
+import java.util.*
 
 @Entity
 @Table(
@@ -68,5 +69,12 @@ class CertificateDB(
 
     @Column(name = "uploader")
     var uploader: String?,
+
+    @Column(name = "document_id", unique = true)
+    val documentID: UUID = UUID.randomUUID(),
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    @JoinColumn(name = "document_file_id", unique = true)
+    var document: DocumentDB,
 
 ): BaseEntity()
