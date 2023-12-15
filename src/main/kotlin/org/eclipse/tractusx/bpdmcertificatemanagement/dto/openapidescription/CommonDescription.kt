@@ -17,14 +17,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.eclipse.tractusx.bpdmcertificatemanagement.repository
+package org.eclipse.tractusx.bpdmcertificatemanagement.dto.openapidescription
 
-import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateTypeDB
-import org.springframework.data.repository.CrudRepository
-import org.springframework.data.repository.PagingAndSortingRepository
+object CommonDescription {
+    const val headerEntityWithErrorsWrapper = "Holds information about successfully and failed entities after the creating/updating of several objects"
 
-interface CertificateTypeRepository:PagingAndSortingRepository<CertificateTypeDB, Long>,CrudRepository<CertificateTypeDB, Long>{
-    fun findByCertificateType(key: String): CertificateTypeDB?
-
-    fun findByCertificateTypeAndCertificateVersion(certificateType: String, certificateVersion: String): CertificateTypeDB?
+    const val createdAt = "The date when the data record has been created."
+    const val updatedAt = "The date when the data record has been last updated."
+    const val type = "The technical identifier for certificate which defines name or the type of certificate such as IATF-16949,ISO-9001 etc along with version of certificate"
 }

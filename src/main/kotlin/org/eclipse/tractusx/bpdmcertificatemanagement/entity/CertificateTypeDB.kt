@@ -19,12 +19,13 @@
 
 package org.eclipse.tractusx.bpdmcertificatemanagement.entity
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.Table
+import jakarta.persistence.*
 
 @Entity
-@Table(name = "certificate_types")
+@Table(
+    name = "certificate_types",
+    uniqueConstraints = [UniqueConstraint(columnNames = ["certificate_type", "certificate_version"])]
+)
 class CertificateTypeDB(
     @Column(name = "certificate_type", nullable = false)
     val certificateType: String,

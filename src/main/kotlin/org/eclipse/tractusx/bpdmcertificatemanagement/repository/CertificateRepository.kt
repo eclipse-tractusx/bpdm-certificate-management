@@ -19,12 +19,8 @@
 
 package org.eclipse.tractusx.bpdmcertificatemanagement.repository
 
-import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateTypeDB
+import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateDB
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.PagingAndSortingRepository
 
-interface CertificateTypeRepository:PagingAndSortingRepository<CertificateTypeDB, Long>,CrudRepository<CertificateTypeDB, Long>{
-    fun findByCertificateType(key: String): CertificateTypeDB?
-
-    fun findByCertificateTypeAndCertificateVersion(certificateType: String, certificateVersion: String): CertificateTypeDB?
-}
+interface CertificateRepository: PagingAndSortingRepository<CertificateDB, Long>, CrudRepository<CertificateDB, Long>

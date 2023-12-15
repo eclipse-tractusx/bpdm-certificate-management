@@ -36,8 +36,12 @@ class MetadataService(
 
     private val logger = KotlinLogging.logger { }
 
-    fun createCertificateType(certificateTypeDto: CertificateTypeDto): CertificateTypeDto{
-        if (certificateTypeRepository.findByCertificateType(certificateTypeDto.certificateType) != null)
+    fun createCertificateType(certificateTypeDto: CertificateTypeDto): CertificateTypeDto {
+        if (certificateTypeRepository.findByCertificateTypeAndCertificateVersion(
+                certificateTypeDto.certificateType,
+                certificateTypeDto.certificateVersion
+            ) != null
+        )
             throw CertificateAlreadyExists(CertificateTypeDB::class.simpleName!!, certificateTypeDto.certificateType)
 
         logger.info { "Create new Certificate Type with name ${certificateTypeDto.certificateType} and version ${certificateTypeDto.certificateVersion}" }

@@ -19,18 +19,23 @@
 
 package org.eclipse.tractusx.bpdmcertificatemanagement.controller
 
-import org.springframework.http.MediaType
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
+import org.eclipse.tractusx.bpdmcertificatemanagement.dto.request.CertificateDocumentRequestDto
+import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateDocumentResponseDto
+import org.eclipse.tractusx.bpdmcertificatemanagement.service.CertificateService
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
+import java.net.URI
 
 @RestController
-@RequestMapping("api/catena/certificate", produces = [MediaType.APPLICATION_JSON_VALUE])
-class CertificateController {
+class CertificateController(
+    val certificateService: CertificateService
+): CertificateApi {
 
-    @GetMapping("/{bpn}")
-    fun getCertificateWelcome(
-        @PathVariable bpn: String
-    ) = "Hello, you requested for certificate $bpn!!"
+    override fun setCertificateDocument(certificateDocumentRequestDto: CertificateDocumentRequestDto): ResponseEntity<CertificateDocumentResponseDto> {
+        val result = certificateService.createCertificate(certificateDocumentRequestDto)
+        return ResponseEntity
+            .created(URI.create("/certificate/${result?.registrationNumber}")) // Set the resource URI
+            .body(result)
+    }
+
 }
