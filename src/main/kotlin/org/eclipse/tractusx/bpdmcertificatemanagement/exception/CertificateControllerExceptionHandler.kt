@@ -39,4 +39,26 @@ class CertificateControllerExceptionHandler {
         )
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorResponse)
     }
+
+    @ExceptionHandler(InvalidBpnFormatException::class)
+    fun handleBusinessPartnerDetails(ex: InvalidBpnFormatException): ResponseEntity<CustomErrorResponse> {
+        val errorResponse = CustomErrorResponse(
+            timestamp = ZonedDateTime.now(),
+            status = HttpStatus.BAD_REQUEST,
+            error = ex.message.toString(),
+            path = "/api/catena/certificate/{bpn}"
+        )
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse)
+    }
+
+    @ExceptionHandler(CertificateNotExists::class)
+    fun handleCertificateNotExists(ex: CertificateNotExists): ResponseEntity<CustomErrorResponse> {
+        val errorResponse = CustomErrorResponse(
+            timestamp = ZonedDateTime.now(),
+            status = HttpStatus.NOT_FOUND,
+            error = ex.message.toString(),
+            path = "/api/catena/certificate/{bpn}"
+        )
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse)
+    }
 }

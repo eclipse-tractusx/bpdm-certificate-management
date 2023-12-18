@@ -17,17 +17,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.eclipse.tractusx.bpdmcertificatemanagement.repository
+package org.eclipse.tractusx.bpdmcertificatemanagement.exception
 
-import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateDB
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.Pageable
-import org.springframework.data.repository.CrudRepository
-import org.springframework.data.repository.PagingAndSortingRepository
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.ResponseStatus
 
-interface CertificateRepository: PagingAndSortingRepository<CertificateDB, Long>, CrudRepository<CertificateDB, Long> {
-    fun findByBusinessPartnerNumber(key: String, pageable: Pageable): Page<CertificateDB>
-
-    fun findByEnclosedSitesSiteBpn(siteBpn: String, pageable: Pageable): Page<CertificateDB>
-}
-
+@ResponseStatus(HttpStatus.NOT_FOUND)
+class CertificateNotExists(
+    objectType: String,
+    identifier: String
+):RuntimeException("The business partner number $identifier of type $objectType not found")

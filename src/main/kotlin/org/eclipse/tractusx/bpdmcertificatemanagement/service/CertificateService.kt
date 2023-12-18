@@ -22,11 +22,16 @@ package org.eclipse.tractusx.bpdmcertificatemanagement.service
 import mu.KotlinLogging
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.request.CertificateDocumentRequestDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateDocumentResponseDto
+import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.PageDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateTypeDB
+import org.eclipse.tractusx.bpdmcertificatemanagement.exception.CertificateNotExists
 import org.eclipse.tractusx.bpdmcertificatemanagement.exception.CertificateTypeNotExists
+import org.eclipse.tractusx.bpdmcertificatemanagement.exception.InvalidBpnFormatException
 import org.eclipse.tractusx.bpdmcertificatemanagement.repository.CertificateRepository
 import org.eclipse.tractusx.bpdmcertificatemanagement.repository.CertificateTypeRepository
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
+import java.lang.IllegalArgumentException
 
 @Service
 class CertificateService(
@@ -56,4 +61,33 @@ class CertificateService(
         return certificateMapping.toCertificateDocumentResponseDto(result)
 
     }
+
+    fun getCertificatesByBpn(bpn: String, pageRequest: PageRequest): PageDto<CertificateDocumentResponseDto> {
+        if (bpn.isBlank())
+            throw IllegalArgumentException("Provided business partner number is null or empty")
+
+        return when {
+            bpn.startsWith("BPNL") -> {
+                val certificates = certificateRepository.findByBusinessPartnerNumber(bpn, pageRequest)
+                if (certificates.isEmpty) {
+                    throw CertificateNotExists("Legal Entity", bpn)
+                }
+                certificates.toPageDto(certificateMapping::toCertificateDocumentResponseDto)
+            }
+
+            bpn.startsWith("BPNS") -> {
+                val certificates = certificateRepository.findByEnclosedSitesSiteBpn(bpn, pageRequest)
+                if (certificates.isEmpty) {
+                    throw CertificateNotExists("Site", bpn)
+                }
+                certificates.toPageDto(certificateMapping::toCertificateDocumentResponseDto)
+            }
+
+            else -> {
+                throw InvalidBpnFormatException(bpn)
+            }
+        }
+
+    }
+
 }

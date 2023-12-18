@@ -20,16 +20,18 @@
 package org.eclipse.tractusx.bpdmcertificatemanagement.controller
 
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
-import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.request.CertificateDocumentRequestDto
+import org.eclipse.tractusx.bpdmcertificatemanagement.dto.request.PaginationRequest
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateDocumentResponseDto
+import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.PageDto
+import org.springdoc.core.annotations.ParameterObject
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
+import org.springframework.web.service.annotation.GetExchange
 import org.springframework.web.service.annotation.HttpExchange
 import org.springframework.web.service.annotation.PostExchange
 
@@ -53,5 +55,28 @@ interface CertificateApi {
     @PostMapping("/certificate/document")
     @PostExchange("/certificate/document")
     fun setCertificateDocument(@RequestBody certificateDocumentRequestDto: CertificateDocumentRequestDto):ResponseEntity<CertificateDocumentResponseDto>
+
+    @Operation(
+        summary = "Get all certificates of a given BPN.",
+        operationId = "getCertificatesByBpnPaginated",
+        description = "This endpoint retrieves all certificates available for the BPN are returned. " +
+                "In case of BPNL,  all certificates available for the BPN are returned. " +
+                "In case of a BPNS, all certificates which either are assigned to the BPNS or the matching BPNL enclosing BPNS are returned.",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Page of certificates matching the search criteria, may be empty"),
+            ApiResponse(responseCode = "400", description = "On malformed pagination request", content = [Content()]),
+            ApiResponse(responseCode = "401", description = "Unauthorized", content = [Content()]),
+            ApiResponse(responseCode = "404", description = "Business Partner number not found", content = [Content()]),
+            ApiResponse(responseCode = "503", description = "Service not available", content = [Content()])
+        ]
+    )
+    @GetMapping("/certificate/{bpn}")
+    @GetExchange("/certificate/{bpn}")
+    fun getCertificatesByBpnPaginated(
+        @Parameter(
+            description = "BPN value, It can be BPNL, BPNS, BPNA",
+            required = true
+        ) @PathVariable("bpn") bpn: String, @ParameterObject paginationRequest: PaginationRequest
+    ): PageDto<CertificateDocumentResponseDto>
 
 }
