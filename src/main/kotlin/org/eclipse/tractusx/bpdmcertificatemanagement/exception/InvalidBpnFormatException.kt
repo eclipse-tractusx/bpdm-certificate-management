@@ -19,10 +19,6 @@
 
 package org.eclipse.tractusx.bpdmcertificatemanagement.exception
 
-import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.ResponseStatus
-
-@ResponseStatus(HttpStatus.BAD_REQUEST)
 class InvalidBpnFormatException(
     identifier: String
 ): RuntimeException("The bpn value $identifier is not a valid business partner number of Legal Entity or Site")

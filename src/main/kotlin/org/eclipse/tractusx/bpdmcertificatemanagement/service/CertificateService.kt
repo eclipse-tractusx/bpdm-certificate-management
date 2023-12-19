@@ -22,6 +22,7 @@ package org.eclipse.tractusx.bpdmcertificatemanagement.service
 import mu.KotlinLogging
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.request.CertificateDocumentRequestDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateDocumentResponseDto
+import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateResponseDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.PageDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateTypeDB
 import org.eclipse.tractusx.bpdmcertificatemanagement.exception.CertificateNotExists
@@ -62,25 +63,25 @@ class CertificateService(
 
     }
 
-    fun getCertificatesByBpn(bpn: String, pageRequest: PageRequest): PageDto<CertificateDocumentResponseDto> {
+    fun getCertificatesByBpn(bpn: String, pageRequest: PageRequest): PageDto<CertificateResponseDto> {
         if (bpn.isBlank())
             throw IllegalArgumentException("Provided business partner number is null or empty")
 
         return when {
             bpn.startsWith("BPNL") -> {
                 val certificates = certificateRepository.findByBusinessPartnerNumber(bpn, pageRequest)
-                if (certificates.isEmpty) {
+                if (certificates.totalElements == 0L) {
                     throw CertificateNotExists("Legal Entity", bpn)
                 }
-                certificates.toPageDto(certificateMapping::toCertificateDocumentResponseDto)
+                certificates.toPageDto(certificateMapping::toCertificateResponseDto)
             }
 
             bpn.startsWith("BPNS") -> {
                 val certificates = certificateRepository.findByEnclosedSitesSiteBpn(bpn, pageRequest)
-                if (certificates.isEmpty) {
+                if (certificates.totalElements == 0L) {
                     throw CertificateNotExists("Site", bpn)
                 }
-                certificates.toPageDto(certificateMapping::toCertificateDocumentResponseDto)
+                certificates.toPageDto(certificateMapping::toCertificateResponseDto)
             }
 
             else -> {
@@ -88,6 +89,39 @@ class CertificateService(
             }
         }
 
+    }
+
+    fun getCertificateByTypeAndBpn(bpn: String, certificateType: String, pageRequest: PageRequest): PageDto<CertificateResponseDto> {
+        if (bpn.isBlank() || certificateType.isBlank()) {
+            throw IllegalArgumentException("Provided business partner number or certificate type is null or empty")
+        }
+
+        val certificateTypes = certificateTypeRepository.findByCertificateType(certificateType)
+        if (certificateTypes.isEmpty()) {
+            throw CertificateTypeNotExists(CertificateTypeDB::class.simpleName!!, certificateType)
+        }
+
+        return when {
+            bpn.startsWith("BPNL") -> {
+                val certificates = certificateRepository.findByBusinessPartnerNumberAndTypeCertificateType(bpn, certificateType, pageRequest)
+                if (certificates.totalElements == 0L) {
+                    throw CertificateNotExists("Legal Entity", bpn)
+                }
+                certificates.toPageDto(certificateMapping::toCertificateResponseDto)
+            }
+
+            bpn.startsWith("BPNS") -> {
+                val certificates = certificateRepository.findByEnclosedSitesSiteBpnAndTypeCertificateType(bpn, certificateType, pageRequest)
+                if (certificates.totalElements == 0L) {
+                    throw CertificateNotExists("Site", bpn)
+                }
+                certificates.toPageDto(certificateMapping::toCertificateResponseDto)
+            }
+
+            else -> {
+                throw InvalidBpnFormatException(bpn)
+            }
+        }
     }
 
 }

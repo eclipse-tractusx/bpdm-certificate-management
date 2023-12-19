@@ -26,6 +26,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.request.CertificateDocumentRequestDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.request.PaginationRequest
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateDocumentResponseDto
+import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateResponseDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.PageDto
 import org.springdoc.core.annotations.ParameterObject
 import org.springframework.http.MediaType
@@ -77,6 +78,27 @@ interface CertificateApi {
             description = "BPN value, It can be BPNL, BPNS, BPNA",
             required = true
         ) @PathVariable("bpn") bpn: String, @ParameterObject paginationRequest: PaginationRequest
-    ): PageDto<CertificateDocumentResponseDto>
+    ): PageDto<CertificateResponseDto>
+
+    @Operation(
+        summary = "Get a specific certificate by certificate type and a given Business Partner Number.",
+        operationId = "getCertificateByTypeAndBpnPaginated",
+        description = "This endpoint retrieves certificate based on certificate type for provided business partner number.",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Certificate for business partner and specified certificate type, " +
+                    "can be the case where provided bpn or certificate type could not be found"),
+            ApiResponse(responseCode = "400", description = "On malformed request", content = [Content()]),
+            ApiResponse(responseCode = "401", description = "Unauthorized", content = [Content()]),
+            ApiResponse(responseCode = "404", description = "Certificate type or business partner number not found", content = [Content()]),
+            ApiResponse(responseCode = "503", description = "Service not available", content = [Content()])
+        ]
+    )
+    @GetMapping("/certificate/{bpn}/{certificateType}")
+    @GetExchange("/certificate/{bpn}/{certificateType}")
+    fun getCertificateByTypeAndBpnPaginated(
+        @Parameter(description = "BPN value, It can be BPNL, BPNS, BPNA", required = true) @PathVariable("bpn") bpn: String,
+        @Parameter(description = "Certificate type e.g. IATF-16949", required = true) @PathVariable("certificateType") certificateType: String,
+        @ParameterObject paginationRequest: PaginationRequest
+    ): PageDto<CertificateResponseDto>
 
 }

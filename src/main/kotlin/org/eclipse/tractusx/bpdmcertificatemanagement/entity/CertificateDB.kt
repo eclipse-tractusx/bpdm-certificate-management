@@ -23,7 +23,10 @@ import jakarta.persistence.*
 import java.time.ZonedDateTime
 
 @Entity
-@Table(name = "certificate")
+@Table(
+    name = "certificate",
+    uniqueConstraints = [UniqueConstraint(columnNames = ["business_partner_number", "certificate_type_id"])]
+)
 class CertificateDB(
 
     @Column(name = "business_partner_number")

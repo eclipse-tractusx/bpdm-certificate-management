@@ -19,10 +19,6 @@
 
 package org.eclipse.tractusx.bpdmcertificatemanagement.exception
 
-import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.ResponseStatus
-
-@ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
 class CertificateTypeNotExists(
     objectType: String,
     identifier: String

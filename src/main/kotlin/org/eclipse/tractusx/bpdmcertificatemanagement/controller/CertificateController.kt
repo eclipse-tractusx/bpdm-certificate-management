@@ -22,6 +22,7 @@ package org.eclipse.tractusx.bpdmcertificatemanagement.controller
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.request.CertificateDocumentRequestDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.request.PaginationRequest
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateDocumentResponseDto
+import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateResponseDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.PageDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.service.CertificateService
 import org.eclipse.tractusx.bpdmcertificatemanagement.service.toPageRequest
@@ -44,8 +45,16 @@ class CertificateController(
     override fun getCertificatesByBpnPaginated(
         bpn: String,
         paginationRequest: PaginationRequest
-    ): PageDto<CertificateDocumentResponseDto> {
+    ): PageDto<CertificateResponseDto> {
         return certificateService.getCertificatesByBpn(bpn, paginationRequest.toPageRequest())
+    }
+
+    override fun getCertificateByTypeAndBpnPaginated(
+        bpn: String,
+        certificateType: String,
+        paginationRequest: PaginationRequest
+    ): PageDto<CertificateResponseDto> {
+        return certificateService.getCertificateByTypeAndBpn(bpn, certificateType, paginationRequest.toPageRequest())
     }
 
 }
