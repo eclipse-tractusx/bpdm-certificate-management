@@ -24,6 +24,7 @@ import org.eclipse.tractusx.bpdmcertificatemanagement.dto.EnclosedSiteDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.TrustValidatorDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.request.CertificateDocumentRequestDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateDocumentResponseDto
+import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateResponseDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateDB
 import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateTypeDB
 import org.eclipse.tractusx.bpdmcertificatemanagement.entity.EnclosedSiteDB
@@ -73,6 +74,25 @@ class CertificateMapping {
 
     fun toCertificateDocumentResponseDto(entity: CertificateDB): CertificateDocumentResponseDto {
         return CertificateDocumentResponseDto(
+            businessPartnerNumber = entity.businessPartnerNumber,
+            type = toCertificateTypeDto(entity.type),
+            registrationNumber = entity.registrationNumber,
+            areaOfApplication = entity.areaOfApplication,
+            remark = entity.remark,
+            enclosedSites = entity.enclosedSites?.map { toEnclosedSiteDto(it) } ?: emptyList(),
+            validFrom = entity.validFrom,
+            validUntil = entity.validUntil,
+            issuer = entity.issuer,
+            trustLevel = entity.trustLevel,
+            validator = entity.validator?.let { toTrustValidatorDto(it) },
+            uploader = entity.uploader,
+            createdAt = entity.createdAt,
+            updatedAt = entity.updatedAt
+        )
+    }
+
+    fun toCertificateResponseDto(entity: CertificateDB): CertificateResponseDto {
+        return CertificateResponseDto(
             businessPartnerNumber = entity.businessPartnerNumber,
             type = toCertificateTypeDto(entity.type),
             registrationNumber = entity.registrationNumber,

@@ -19,7 +19,7 @@
 
 package org.eclipse.tractusx.bpdmcertificatemanagement.exception
 
-class CertificateTypeNotExists(
+class CertificateNotExists(
     objectType: String,
     identifier: String
-):RuntimeException("$objectType with the following certificate type doesn't exists: $identifier")
+):RuntimeException("The business partner number $identifier of type $objectType not found")

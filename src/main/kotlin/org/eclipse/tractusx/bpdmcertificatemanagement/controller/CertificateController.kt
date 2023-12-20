@@ -20,8 +20,12 @@
 package org.eclipse.tractusx.bpdmcertificatemanagement.controller
 
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.request.CertificateDocumentRequestDto
+import org.eclipse.tractusx.bpdmcertificatemanagement.dto.request.PaginationRequest
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateDocumentResponseDto
+import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateResponseDto
+import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.PageDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.service.CertificateService
+import org.eclipse.tractusx.bpdmcertificatemanagement.service.toPageRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
 import java.net.URI
@@ -36,6 +40,21 @@ class CertificateController(
         return ResponseEntity
             .created(URI.create("/certificate/${result?.registrationNumber}")) // Set the resource URI
             .body(result)
+    }
+
+    override fun getCertificatesByBpnPaginated(
+        bpn: String,
+        paginationRequest: PaginationRequest
+    ): PageDto<CertificateResponseDto> {
+        return certificateService.getCertificatesByBpn(bpn, paginationRequest.toPageRequest())
+    }
+
+    override fun getCertificateByTypeAndBpnPaginated(
+        bpn: String,
+        certificateType: String,
+        paginationRequest: PaginationRequest
+    ): PageDto<CertificateResponseDto> {
+        return certificateService.getCertificateByTypeAndBpn(bpn, certificateType, paginationRequest.toPageRequest())
     }
 
 }

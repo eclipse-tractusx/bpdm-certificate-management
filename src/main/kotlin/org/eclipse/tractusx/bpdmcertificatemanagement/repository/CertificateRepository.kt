@@ -20,7 +20,18 @@
 package org.eclipse.tractusx.bpdmcertificatemanagement.repository
 
 import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateDB
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.PagingAndSortingRepository
 
-interface CertificateRepository: PagingAndSortingRepository<CertificateDB, Long>, CrudRepository<CertificateDB, Long>
+interface CertificateRepository: PagingAndSortingRepository<CertificateDB, Long>, CrudRepository<CertificateDB, Long> {
+    fun findByBusinessPartnerNumber(key: String, pageable: Pageable): Page<CertificateDB>
+
+    fun findByEnclosedSitesSiteBpn(siteBpn: String, pageable: Pageable): Page<CertificateDB>
+
+    fun findByBusinessPartnerNumberAndTypeCertificateType(bpn: String, certificateType: String, pageable: Pageable): Page<CertificateDB>
+
+    fun findByEnclosedSitesSiteBpnAndTypeCertificateType(siteBpn: String, certificateType: String, pageable: Pageable): Page<CertificateDB>
+}
+

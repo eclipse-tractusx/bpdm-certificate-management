@@ -19,7 +19,6 @@
 
 package org.eclipse.tractusx.bpdmcertificatemanagement.exception
 
-class CertificateTypeNotExists(
-    objectType: String,
+class InvalidBpnFormatException(
     identifier: String
-):RuntimeException("$objectType with the following certificate type doesn't exists: $identifier")
+): RuntimeException("The bpn value $identifier is not a valid business partner number of Legal Entity or Site")

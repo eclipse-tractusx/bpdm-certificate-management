@@ -24,7 +24,7 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.PagingAndSortingRepository
 
 interface CertificateTypeRepository:PagingAndSortingRepository<CertificateTypeDB, Long>,CrudRepository<CertificateTypeDB, Long>{
-    fun findByCertificateType(key: String): CertificateTypeDB?
+    fun findByCertificateType(key: String): List<CertificateTypeDB>
 
     fun findByCertificateTypeAndCertificateVersion(certificateType: String, certificateVersion: String): CertificateTypeDB?
 }
