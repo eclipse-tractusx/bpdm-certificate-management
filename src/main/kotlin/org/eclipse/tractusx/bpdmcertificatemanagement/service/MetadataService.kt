@@ -23,11 +23,11 @@ import mu.KotlinLogging
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.CertificateTypeDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.PageDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateTypeDB
-import org.eclipse.tractusx.bpdmcertificatemanagement.exception.CertificateAlreadyExists
+import org.eclipse.tractusx.bpdmcertificatemanagement.exception.CertificateTypeAlreadyExists
+import org.eclipse.tractusx.bpdmcertificatemanagement.exception.InvalidTypeFormatException
 import org.eclipse.tractusx.bpdmcertificatemanagement.repository.CertificateTypeRepository
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import org.eclipse.tractusx.bpdmcertificatemanagement.service.toDto
 
 @Service
 class MetadataService(
@@ -37,12 +37,9 @@ class MetadataService(
     private val logger = KotlinLogging.logger { }
 
     fun createCertificateType(certificateTypeDto: CertificateTypeDto): CertificateTypeDto {
-        if (certificateTypeRepository.findByCertificateTypeAndCertificateVersion(
-                certificateTypeDto.certificateType,
-                certificateTypeDto.certificateVersion
-            ) != null
-        )
-            throw CertificateAlreadyExists(CertificateTypeDB::class.simpleName!!, certificateTypeDto.certificateType)
+        logger.debug { "Executing createCertificateType() with parameters $certificateTypeDto" }
+
+        validateTypeBeforeProcess(certificateTypeDto)
 
         logger.info { "Create new Certificate Type with name ${certificateTypeDto.certificateType} and version ${certificateTypeDto.certificateVersion}" }
 
@@ -57,6 +54,20 @@ class MetadataService(
     fun getCertificateTypes(pageRequest: Pageable): PageDto<CertificateTypeDto> {
         val page = certificateTypeRepository.findAll(pageRequest)
         return page.toDto(page.content.map { it.toDto() })
+    }
+
+    private fun validateTypeBeforeProcess(certificateTypeDto: CertificateTypeDto) {
+
+        if (certificateTypeDto.certificateType.isBlank() || certificateTypeDto.certificateVersion.isBlank())
+            throw InvalidTypeFormatException(certificateTypeDto.certificateType, certificateTypeDto.certificateVersion)
+
+        //Checking certificate type already present in system
+        if (certificateTypeRepository.findByCertificateTypeAndCertificateVersion(
+                certificateTypeDto.certificateType,
+                certificateTypeDto.certificateVersion
+            ) != null
+        )
+            throw CertificateTypeAlreadyExists(CertificateTypeDB::class.simpleName!!, certificateTypeDto.certificateType)
     }
 
 }
