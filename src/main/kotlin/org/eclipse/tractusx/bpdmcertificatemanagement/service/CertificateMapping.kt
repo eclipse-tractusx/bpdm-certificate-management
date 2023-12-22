@@ -30,6 +30,7 @@ import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateTypeDB
 import org.eclipse.tractusx.bpdmcertificatemanagement.entity.EnclosedSiteDB
 import org.eclipse.tractusx.bpdmcertificatemanagement.entity.TrustValidatorDB
 import org.springframework.stereotype.Service
+import java.time.ZonedDateTime
 
 @Service
 class CertificateMapping {
@@ -42,8 +43,8 @@ class CertificateMapping {
             areaOfApplication = dto.areaOfApplication,
             remark = dto.remark,
             enclosedSites = dto.enclosedSites?.mapNotNull { toEnclosedSitesDB(it) }?.toSortedSet(),
-            validFrom = dto.validFrom,
-            validUntil = dto.validUntil,
+            validFrom = toDefaultMappingValidFrom(dto.validFrom),
+            validUntil = toDefaultMappingValidUntil(dto.validUntil),
             issuer = dto.issuer,
             trustLevel = dto.trustLevel,
             validator = dto.validator?.let { toTrustValidatorDB(it) },
@@ -128,6 +129,18 @@ class CertificateMapping {
             validatorName = entity.validatorName,
             validatorBpn = entity.validatorBpn
         )
+    }
+
+    private fun toDefaultMappingValidUntil(dateTime: ZonedDateTime?):ZonedDateTime{
+        if (dateTime == null)
+            return ZonedDateTime.parse("9999-12-31T23:59:59Z")
+        return dateTime
+    }
+
+    private fun toDefaultMappingValidFrom(dateTime: ZonedDateTime?):ZonedDateTime{
+        if (dateTime == null)
+            return ZonedDateTime.now()
+        return dateTime
     }
 
 }

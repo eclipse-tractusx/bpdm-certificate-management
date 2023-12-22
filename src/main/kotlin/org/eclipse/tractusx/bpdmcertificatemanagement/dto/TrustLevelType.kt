@@ -17,13 +17,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.eclipse.tractusx.bpdmcertificatemanagement.exception
+package org.eclipse.tractusx.bpdmcertificatemanagement.dto
 
-import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.ResponseStatus
-
-@ResponseStatus(HttpStatus.CONFLICT)
-class CertificateAlreadyExists(
-    objectType: String,
-    identifier: String
-): RuntimeException("$objectType with the following identifier already exists: $identifier")
+enum class TrustLevelType {
+    None,
+    Low,
+    Medium,
+    High,
+    Trusted
+}

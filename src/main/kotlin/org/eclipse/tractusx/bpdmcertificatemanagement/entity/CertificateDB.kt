@@ -20,6 +20,7 @@
 package org.eclipse.tractusx.bpdmcertificatemanagement.entity
 
 import jakarta.persistence.*
+import org.eclipse.tractusx.bpdmcertificatemanagement.dto.TrustLevelType
 import java.time.ZonedDateTime
 
 @Entity
@@ -58,8 +59,9 @@ class CertificateDB(
     @Column(name = "issuer")
     var issuer: String?,
 
-    @Column(name = "trust_level")
-    var trustLevel: String?,
+    @Column(name = "trust_level", nullable = false)
+    @Enumerated(EnumType.STRING)
+    var trustLevel: TrustLevelType,
 
     @Embedded
     var validator: TrustValidatorDB?,
