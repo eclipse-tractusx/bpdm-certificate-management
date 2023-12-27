@@ -21,3 +21,4 @@ target
 #Developer application properties
 application-developer.properties
 *.drawio.svg.bkp
+out
