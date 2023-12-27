@@ -22,9 +22,11 @@ package org.eclipse.tractusx.bpdmcertificatemanagement.service
 import mu.KotlinLogging
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.CertificateTypeDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.request.CertificateDocumentRequestDto
+import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.BpnCertifiedCertificateResponse
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateDocumentResponseDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateResponseDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.PageDto
+import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateDB
 import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateTypeDB
 import org.eclipse.tractusx.bpdmcertificatemanagement.exception.CertificateDocumentIdNotFound
 import org.eclipse.tractusx.bpdmcertificatemanagement.exception.CertificateNotExists
@@ -35,7 +37,7 @@ import org.eclipse.tractusx.bpdmcertificatemanagement.repository.CertificateType
 import org.springframework.data.domain.PageRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
-import java.util.*
+import java.util.UUID
 
 @Service
 class CertificateService(
@@ -45,6 +47,9 @@ class CertificateService(
 ) {
 
     private val logger = KotlinLogging.logger { }
+
+    var objectTypeLegalEntity = "Legal Entity"
+    var objectTypeSite = "Site"
 
     fun createCertificate(certificateDocumentRequestDto: CertificateDocumentRequestDto): CertificateDocumentResponseDto? {
         logger.debug { "Executing createCertificate() with parameters $certificateDocumentRequestDto" }
@@ -59,7 +64,6 @@ class CertificateService(
 
     }
 
-
     fun retrieveCertificate(cdID: UUID): ResponseEntity<CertificateDocumentResponseDto> {
         logger.debug { "Executing retrieveCertificate() with parameters $cdID" }
 
@@ -67,6 +71,57 @@ class CertificateService(
             ?: throw CertificateDocumentIdNotFound(cdID.toString())
 
         return ResponseEntity.ok(certificateMapping.toCertificateDocumentResponseDto(certificate))
+
+    }
+
+    fun checkCertificateByBpnAndType(bpn: String, certificateType: String): List<BpnCertifiedCertificateResponse> {
+
+        //Checks if certificate type exists in the DB
+        val certificateTypes = certificateTypeRepository.findByCertificateType(certificateType)
+        if (certificateTypes.isEmpty()) {
+            throw CertificateTypeNotExists(CertificateTypeDB::class.simpleName!!, certificateType)
+        }
+
+        return when {
+            bpn.startsWith("BPNL") -> findCertificateByBusinessPartnerNumber(bpn, certificateType)
+            bpn.startsWith("BPNS") -> findCertificateByEnclosedSitesSiteBpn(bpn, certificateType)
+            else -> throw InvalidBpnFormatException(bpn)
+        }
+
+    }
+
+    private fun findCertificateByBusinessPartnerNumber(bpn: String, certificateType: String): List<BpnCertifiedCertificateResponse> {
+        val certificates = certificateRepository.findByBusinessPartnerNumber(bpn)
+
+        if (certificates.isEmpty()) {
+            throw CertificateNotExists(objectTypeLegalEntity, bpn)
+        }
+
+        return createCertifiedCertificateResponse(certificates, bpn, certificateType)
+    }
+
+    private fun findCertificateByEnclosedSitesSiteBpn(bpn: String, certificateType: String): List<BpnCertifiedCertificateResponse> {
+        val certificates = certificateRepository.findByEnclosedSitesSiteBpn(bpn)
+
+        if (certificates.isEmpty()) {
+            throw CertificateNotExists(objectTypeSite, bpn)
+        }
+
+        return createCertifiedCertificateResponse(certificates, bpn, certificateType)
+    }
+
+    private fun createCertifiedCertificateResponse(certificates: List<CertificateDB>, bpn: String, certificateType: String): List<BpnCertifiedCertificateResponse> {
+
+        val matchingCertificate = certificates.filter { it.type.certificateType == certificateType }
+
+        return if (matchingCertificate.isNotEmpty()) {
+            val updatedCleanCertificate = matchingCertificate.map {
+                certificateMapping.toBpnCertifiedCertificateResponse(it, true)
+            }
+            updatedCleanCertificate
+        } else {
+            listOf(BpnCertifiedCertificateResponse(bpn, false))
+        }
 
     }
 
@@ -78,7 +133,7 @@ class CertificateService(
             bpn.startsWith("BPNL") -> {
                 val certificates = certificateRepository.findByBusinessPartnerNumber(bpn, pageRequest)
                 if (certificates.totalElements == 0L) {
-                    throw CertificateNotExists("Legal Entity", bpn)
+                    throw CertificateNotExists(objectTypeLegalEntity, bpn)
                 }
                 certificates.toPageDto(certificateMapping::toCertificateResponseDto)
             }
@@ -86,7 +141,7 @@ class CertificateService(
             bpn.startsWith("BPNS") -> {
                 val certificates = certificateRepository.findByEnclosedSitesSiteBpn(bpn, pageRequest)
                 if (certificates.totalElements == 0L) {
-                    throw CertificateNotExists("Site", bpn)
+                    throw CertificateNotExists(objectTypeSite, bpn)
                 }
                 certificates.toPageDto(certificateMapping::toCertificateResponseDto)
             }
@@ -112,7 +167,7 @@ class CertificateService(
             bpn.startsWith("BPNL") -> {
                 val certificates = certificateRepository.findByBusinessPartnerNumberAndTypeCertificateType(bpn, certificateType, pageRequest)
                 if (certificates.totalElements == 0L) {
-                    throw CertificateNotExists("Legal Entity", bpn)
+                    throw CertificateNotExists(objectTypeLegalEntity, bpn)
                 }
                 certificates.toPageDto(certificateMapping::toCertificateResponseDto)
             }
@@ -120,7 +175,7 @@ class CertificateService(
             bpn.startsWith("BPNS") -> {
                 val certificates = certificateRepository.findByEnclosedSitesSiteBpnAndTypeCertificateType(bpn, certificateType, pageRequest)
                 if (certificates.totalElements == 0L) {
-                    throw CertificateNotExists("Site", bpn)
+                    throw CertificateNotExists(objectTypeSite, bpn)
                 }
                 certificates.toPageDto(certificateMapping::toCertificateResponseDto)
             }

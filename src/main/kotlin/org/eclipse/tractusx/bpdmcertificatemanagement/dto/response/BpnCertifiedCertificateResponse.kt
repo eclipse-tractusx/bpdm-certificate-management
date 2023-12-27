@@ -17,11 +17,17 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package org.eclipse.tractusx.bpdmcertificatemanagement.exception
+package org.eclipse.tractusx.bpdmcertificatemanagement.dto.response
 
-import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.ResponseStatus
+import org.eclipse.tractusx.bpdmcertificatemanagement.dto.CertificateTypeDto
+import org.eclipse.tractusx.bpdmcertificatemanagement.dto.TrustLevelType
+import java.time.ZonedDateTime
 
-class CertificateDocumentIdNotFound(
-    documentId: String
-):RuntimeException("Certificate with document ID ($documentId) doesn't exist")
+data class BpnCertifiedCertificateResponse(
+
+    val businessPartnerNumber: String? = null,
+    val isCertified: Boolean,
+    val validUntil: ZonedDateTime? = null,
+    val trustLevel: TrustLevelType = TrustLevelType.None,
+    val type: CertificateTypeDto? = null,
+)
