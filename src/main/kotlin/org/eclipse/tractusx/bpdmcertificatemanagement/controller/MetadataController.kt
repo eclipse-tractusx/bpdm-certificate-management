@@ -27,9 +27,10 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-public open class MetadataController(
+class MetadataController(
     val metadataService: MetadataService
 ): MetadataApi {
+
     override fun setCertificateType(certificateTypeDto: CertificateTypeDto): CertificateTypeDto {
         return metadataService.createCertificateType(certificateTypeDto)
     }

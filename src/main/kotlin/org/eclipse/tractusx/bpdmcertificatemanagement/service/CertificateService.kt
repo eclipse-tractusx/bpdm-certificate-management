@@ -26,14 +26,16 @@ import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateDo
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateResponseDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.PageDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateTypeDB
+import org.eclipse.tractusx.bpdmcertificatemanagement.exception.CertificateDocumentIdNotFound
 import org.eclipse.tractusx.bpdmcertificatemanagement.exception.CertificateNotExists
 import org.eclipse.tractusx.bpdmcertificatemanagement.exception.CertificateTypeNotExists
 import org.eclipse.tractusx.bpdmcertificatemanagement.exception.InvalidBpnFormatException
 import org.eclipse.tractusx.bpdmcertificatemanagement.repository.CertificateRepository
 import org.eclipse.tractusx.bpdmcertificatemanagement.repository.CertificateTypeRepository
 import org.springframework.data.domain.PageRequest
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
-import java.lang.IllegalArgumentException
+import java.util.*
 
 @Service
 class CertificateService(
@@ -54,6 +56,17 @@ class CertificateService(
         val result = certificateRepository.save(entity)
 
         return certificateMapping.toCertificateDocumentResponseDto(result)
+
+    }
+
+
+    fun retrieveCertificate(cdID: UUID): ResponseEntity<CertificateDocumentResponseDto> {
+        logger.debug { "Executing retrieveCertificate() with parameters $cdID" }
+
+        val certificate = certificateRepository.findByDocumentID(cdID)
+            ?: throw CertificateDocumentIdNotFound(cdID.toString())
+
+        return ResponseEntity.ok(certificateMapping.toCertificateDocumentResponseDto(certificate))
 
     }
 

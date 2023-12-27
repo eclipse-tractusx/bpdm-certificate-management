@@ -85,5 +85,15 @@ class CertificateControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse)
     }
 
+    @ExceptionHandler(CertificateDocumentIdNotFound::class)
+    fun handleCertificateDocumentIdNotFound(ex: CertificateDocumentIdNotFound, request: WebRequest): ResponseEntity<CustomErrorResponse> {
+        val errorResponse = CustomErrorResponse(
+            timestamp = ZonedDateTime.now(),
+            status = HttpStatus.NOT_FOUND,
+            error = ex.message.toString(),
+            path = request.getDescription(false)
+        )
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse)
+    }
 
 }

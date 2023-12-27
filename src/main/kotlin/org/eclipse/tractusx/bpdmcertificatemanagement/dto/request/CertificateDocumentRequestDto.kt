@@ -21,6 +21,7 @@ package org.eclipse.tractusx.bpdmcertificatemanagement.dto.request
 
 import io.swagger.v3.oas.annotations.media.Schema
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.CertificateTypeDto
+import org.eclipse.tractusx.bpdmcertificatemanagement.dto.DocumentDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.EnclosedSiteDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.TrustLevelType
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.TrustValidatorDto
@@ -46,5 +47,6 @@ data class CertificateDocumentRequestDto(
     val trustLevel: TrustLevelType,
     val validator: TrustValidatorDto? = null,
     val uploader: String? = null,
+    val document: DocumentDto
 )
 

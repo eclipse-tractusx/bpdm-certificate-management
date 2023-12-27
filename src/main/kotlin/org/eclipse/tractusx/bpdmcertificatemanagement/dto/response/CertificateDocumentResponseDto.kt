@@ -21,12 +21,14 @@ package org.eclipse.tractusx.bpdmcertificatemanagement.dto.response
 
 import io.swagger.v3.oas.annotations.media.Schema
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.CertificateTypeDto
+import org.eclipse.tractusx.bpdmcertificatemanagement.dto.DocumentDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.EnclosedSiteDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.TrustLevelType
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.TrustValidatorDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.openapidescription.CommonDescription
 import java.time.Instant
 import java.time.ZonedDateTime
+import java.util.*
 
 data class CertificateDocumentResponseDto(
 
@@ -42,6 +44,8 @@ data class CertificateDocumentResponseDto(
     val trustLevel: TrustLevelType,
     val validator: TrustValidatorDto? = null,
     val uploader: String? = null,
+    val documentID: UUID,
+    val document: DocumentDto,
 
     @get:Schema(description = CommonDescription.createdAt)
     val createdAt: Instant,
