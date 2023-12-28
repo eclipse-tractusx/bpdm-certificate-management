@@ -37,5 +37,9 @@ interface CertificateRepository: PagingAndSortingRepository<CertificateDB, Long>
     fun findByEnclosedSitesSiteBpnAndTypeCertificateType(siteBpn: String, certificateType: String, pageable: Pageable): Page<CertificateDB>
 
     fun findByDocumentID(id: UUID): CertificateDB?
+
+    fun findByBusinessPartnerNumber(key: String): List<CertificateDB>
+
+    fun findByEnclosedSitesSiteBpn(siteBpn: String): List<CertificateDB>
 }
 

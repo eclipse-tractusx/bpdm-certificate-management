@@ -24,6 +24,7 @@ import org.eclipse.tractusx.bpdmcertificatemanagement.dto.DocumentDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.EnclosedSiteDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.TrustValidatorDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.request.CertificateDocumentRequestDto
+import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.BpnCertifiedCertificateResponse
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateDocumentResponseDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateResponseDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.entity.*
@@ -142,6 +143,16 @@ class CertificateMapping {
         if (dateTime == null)
             return ZonedDateTime.now()
         return dateTime
+    }
+
+    fun toBpnCertifiedCertificateResponse(entity: CertificateDB, certifiedAssertion: Boolean): BpnCertifiedCertificateResponse {
+        return BpnCertifiedCertificateResponse(
+            businessPartnerNumber = entity.businessPartnerNumber,
+            isCertified = certifiedAssertion,
+            type = toCertificateTypeDto(entity.type),
+            validUntil = entity.validUntil,
+            trustLevel = entity.trustLevel,
+        )
     }
 
     private fun toDocumentDto(entity: DocumentDB): DocumentDto =

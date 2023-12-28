@@ -25,6 +25,7 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.request.CertificateDocumentRequestDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.request.PaginationRequest
+import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.BpnCertifiedCertificateResponse
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateDocumentResponseDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateResponseDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.PageDto
@@ -120,5 +121,24 @@ interface CertificateApi {
         @Parameter(description = "Certificate type e.g. IATF-16949", required = true) @PathVariable("certificateType") certificateType: String,
         @ParameterObject paginationRequest: PaginationRequest
     ): PageDto<CertificateResponseDto>
+
+    @Operation(
+        summary = " Gets info whether BPN is certified for a specific certificate type.",
+        operationId = "checkCertificateByBpnAndType",
+        description = "This endpoint checks whether a provided BPN is certified for a specific certificate type.",
+        responses = [
+            ApiResponse(responseCode = "201", description = "Certificate list for BP"),
+            ApiResponse(responseCode = "400", description = "Malformed URL", content = [Content()]),
+            ApiResponse(responseCode = "401", description = "Unauthorized", content = [Content()]),
+            ApiResponse(responseCode = "404", description = "Certificate type or business partner number not found", content = [Content()]),
+            ApiResponse(responseCode = "503", description = "Service not available", content = [Content()])
+        ]
+    )
+    @GetMapping("/certificate/simple/{bpn}/{certificateType}")
+    @GetExchange("/certificate/simple/{bpn}/{certificateType}")
+    fun checkCertificateByBpnAndType(
+        @Parameter(description = "Business Partner Number", required = true) @PathVariable bpn: String,
+        @Parameter(description = "Certificate Type", required = true) @PathVariable certificateType: String
+    ): List<BpnCertifiedCertificateResponse>
 
 }
