@@ -19,9 +19,6 @@
 
 package org.eclipse.tractusx.bpdmcertificatemanagement.exception
 
-import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.ResponseStatus
-
 class CertificateDocumentIdNotFound(
     documentId: String
 ):RuntimeException("Certificate with document ID ($documentId) doesn't exist")

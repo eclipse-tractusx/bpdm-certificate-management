@@ -1,5 +1,5 @@
-/*
- * Copyright (c) 2023 Contributors to the Eclipse Foundation
+/*******************************************************************************
+ * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -15,17 +15,16 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- */
-package org.eclipse.tractusx.bpdmcertificatemanagement
+ ******************************************************************************/
 
-import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
+package org.eclipse.tractusx.bpdmcertificatemanagement.config
 
-@SpringBootTest
-class ApplicationTests {
+import org.eclipse.tractusx.bpdmcertificatemanagement.controller.CertificateApi
+import org.eclipse.tractusx.bpdmcertificatemanagement.controller.MetadataApi
 
-    @Test
-    fun contextLoads() {
-    }
+interface CertificateClient {
 
+    val certificateApi: CertificateApi
+
+    val metadataApi: MetadataApi
 }
