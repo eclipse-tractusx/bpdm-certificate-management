@@ -21,11 +21,9 @@ package org.eclipse.tractusx.bpdmcertificatemanagement.controller
 
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
 import org.eclipse.tractusx.bpdmcertificatemanagement.config.CertificateClient
+import org.eclipse.tractusx.bpdmcertificatemanagement.data.CertificateTestValues
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.*
-import org.eclipse.tractusx.bpdmcertificatemanagement.dto.request.CertificateDocumentRequestDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.request.PaginationRequest
-import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.BpnCertifiedCertificateResponse
-import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateResponseDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.PageDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.repository.CertificateRepository
 import org.eclipse.tractusx.bpdmcertificatemanagement.util.DbTestHelpers
@@ -41,7 +39,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.web.reactive.function.client.WebClientResponseException
-import java.time.Instant
 import java.util.*
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -58,16 +55,13 @@ internal class CertificateControllerIT @Autowired constructor(
         dbTestHelpers.truncateDbTables()
     }
 
-    val certificateValue = CertificateTypeDto("ISO9001", "0.0.1")
-
     /** Retrieve an existing certificate document */
     @Test
     fun `retrieve a certificate document by UUID`() {
-        val certificate = createCertificateDocumentRequestDto()
 
         createCertificateProcess()
 
-        val retrievedCertificate = certificateRepository.findByBusinessPartnerNumber(certificate.businessPartnerNumber, PageRequest.of(0, 1))
+        val retrievedCertificate = certificateRepository.findByBusinessPartnerNumber(CertificateTestValues.certificateDocumentRequest.businessPartnerNumber, PageRequest.of(0, 1))
 
         val certificateByUUID =  certificateClient.certificateApi.getCertificateDocument(retrievedCertificate.content.first().documentID)
 
@@ -91,11 +85,9 @@ internal class CertificateControllerIT @Autowired constructor(
     @Test
     fun `insert a certificate document`() {
 
-        val certificate = createCertificateDocumentRequestDto()
-
         createCertificateProcess()
 
-        val createdCertificate = certificateClient.certificateApi.getCertificatesByBpnPaginated(certificate.businessPartnerNumber, PaginationRequest(0, 2))
+        val createdCertificate = certificateClient.certificateApi.getCertificatesByBpnPaginated(CertificateTestValues.certificateDocumentRequest.businessPartnerNumber, PaginationRequest(0, 2))
 
         assertNotEquals(createdCertificate.content, null)
 
@@ -105,13 +97,11 @@ internal class CertificateControllerIT @Autowired constructor(
     @Test
     fun `insert a certificate document with wrong BPN formats`() {
 
-        val certificate = createCertificateDocumentRequestDto()
-
         //Create a Type
-        certificateClient.metadataApi.setCertificateType(certificateValue)
+        certificateClient.metadataApi.setCertificateType(CertificateTestValues.certificateType)
 
         try {
-            certificateClient.certificateApi.setCertificateDocument(certificate.copy(businessPartnerNumber = "WrongFormatBPN"))
+            certificateClient.certificateApi.setCertificateDocument(CertificateTestValues.certificateDocumentRequest.copy(businessPartnerNumber = "WrongFormatBPN"))
         } catch (e: WebClientResponseException) {
             assertEquals(HttpStatus.BAD_REQUEST, e.statusCode)
         }
@@ -122,15 +112,13 @@ internal class CertificateControllerIT @Autowired constructor(
     @Test
     fun `check Certificate by Bpn and Type`() {
 
-        val certificate = createCertificateDocumentRequestDto()
-        val response = createBpnCertifiedCertificateResponse()
-
         createCertificateProcess()
 
-        val createdCertificate = certificateClient.certificateApi.checkCertificateByBpnAndType(certificate.businessPartnerNumber, certificate.type.certificateType)
+        val createdCertificate = certificateClient.certificateApi.checkCertificateByBpnAndType(CertificateTestValues.certificateDocumentRequest.businessPartnerNumber,
+            CertificateTestValues.certificateDocumentRequest.type.certificateType)
 
         assertThat(createdCertificate).usingRecursiveComparison().ignoringFieldsMatchingRegexes(".*createdAt*", ".*updatedAt*", ".*validFrom*", ".*validUntil*")
-            .isEqualTo(listOf(response))
+            .isEqualTo(listOf(CertificateTestValues.bpnCertifiedCertificateResponse))
 
     }
 
@@ -139,12 +127,10 @@ internal class CertificateControllerIT @Autowired constructor(
     @Test
     fun `check a non existent Certificate by Bpn and Type`() {
 
-        val certificate = createCertificateDocumentRequestDto()
-
         createCertificateProcess()
 
         try {
-            certificateClient.certificateApi.checkCertificateByBpnAndType("WrongFormatBPN", certificate.type.certificateType)
+            certificateClient.certificateApi.checkCertificateByBpnAndType("WrongFormatBPN", CertificateTestValues.certificateDocumentRequest.type.certificateType)
         } catch (e: WebClientResponseException) {
             assertEquals(HttpStatus.BAD_REQUEST, e.statusCode)
         }
@@ -155,12 +141,9 @@ internal class CertificateControllerIT @Autowired constructor(
     @Test
     fun `get Certificate by Bpn`() {
 
-        val certificate = createCertificateDocumentRequestDto()
-        val response = createCertificateResponseDto()
-
         createCertificateProcess()
 
-        val createdCertificate = certificateClient.certificateApi.getCertificatesByBpnPaginated(certificate.businessPartnerNumber, PaginationRequest(0, 1))
+        val createdCertificate = certificateClient.certificateApi.getCertificatesByBpnPaginated(CertificateTestValues.certificateDocumentRequest.businessPartnerNumber, PaginationRequest(0, 1))
 
         assertThat(createdCertificate).usingRecursiveComparison().ignoringFieldsMatchingRegexes(".*createdAt*", ".*updatedAt*", ".*validFrom*", ".*validUntil*").isEqualTo(
             PageDto(
@@ -168,7 +151,7 @@ internal class CertificateControllerIT @Autowired constructor(
                 totalPages = 1,
                 page = 0,
                 contentSize = 1,
-                content = listOf(response)
+                content = listOf(CertificateTestValues.certificateResponse)
             )
         )
 
@@ -192,12 +175,9 @@ internal class CertificateControllerIT @Autowired constructor(
     @Test
     fun `get Certificate by Bpn and Type paginated`() {
 
-        val certificate = createCertificateDocumentRequestDto()
-        val response = createCertificateResponseDto()
-
         createCertificateProcess()
 
-        val createdCertificate = certificateClient.certificateApi.getCertificateByTypeAndBpnPaginated(certificate.businessPartnerNumber, "ISO9001", PaginationRequest(0, 1))
+        val createdCertificate = certificateClient.certificateApi.getCertificateByTypeAndBpnPaginated(CertificateTestValues.certificateDocumentRequest.businessPartnerNumber, "ISO9001", PaginationRequest(0, 1))
 
         assertThat(createdCertificate).usingRecursiveComparison().ignoringFieldsMatchingRegexes(".*createdAt*", ".*updatedAt*", ".*validFrom*", ".*validUntil*").isEqualTo(
             PageDto(
@@ -205,69 +185,17 @@ internal class CertificateControllerIT @Autowired constructor(
                 totalPages = 1,
                 page = 0,
                 contentSize = 1,
-                content = listOf(response)
+                content = listOf(CertificateTestValues.certificateResponse)
             )
         )
     }
 
     private fun createCertificateProcess() {
-        val certificate = createCertificateDocumentRequestDto()
 
         //Create a Type
-        certificateClient.metadataApi.setCertificateType(certificateValue)
+        certificateClient.metadataApi.setCertificateType(CertificateTestValues.certificateType)
         //Create the certificate
-        certificateClient.certificateApi.setCertificateDocument(certificate)
-    }
-
-    private fun createBpnCertifiedCertificateResponse(): BpnCertifiedCertificateResponse {
-
-        return BpnCertifiedCertificateResponse(
-            businessPartnerNumber = "BPNL_001",
-            isCertified = true,
-            validUntil = null,
-            trustLevel = TrustLevelType.None,
-            type = CertificateTypeDto("ISO9001", "0.0.1")
-        )
-
-    }
-
-    private fun createCertificateDocumentRequestDto(): CertificateDocumentRequestDto {
-
-        return CertificateDocumentRequestDto(
-            businessPartnerNumber = "BPNL_001",
-            type = CertificateTypeDto("ISO9001", "0.0.1"),
-            registrationNumber = "RegistrationNumber01",
-            areaOfApplication = "AreaTest01",
-            remark = "Remark01",
-            enclosedSites = emptyList(),
-            validFrom = null,
-            validUntil = null,
-            issuer = "BPNS_001",
-            trustLevel = TrustLevelType.None,
-            validator = TrustValidatorDto("NameTest01", "BPNS_001"),
-            uploader = "BPNL_001",
-            document = DocumentDto("RandomValue", FileType.PDF)
-        )
-    }
-
-    private fun createCertificateResponseDto(): CertificateResponseDto {
-
-        return CertificateResponseDto(
-            businessPartnerNumber = "BPNL_001",
-            type = CertificateTypeDto("ISO9001", "0.0.1"),
-            registrationNumber = "RegistrationNumber01",
-            areaOfApplication = "AreaTest01",
-            remark = "Remark01",
-            enclosedSites = emptyList(),
-            validFrom = null,
-            validUntil = null,
-            issuer = "BPNS_001",
-            trustLevel = TrustLevelType.None,
-            validator = TrustValidatorDto("NameTest01", "BPNS_001"),
-            uploader = "BPNL_001",
-            createdAt = Instant.now(),
-            updatedAt = Instant.now()
-        )
+        certificateClient.certificateApi.setCertificateDocument(CertificateTestValues.certificateDocumentRequest)
     }
 
 }

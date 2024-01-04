@@ -21,7 +21,7 @@ package org.eclipse.tractusx.bpdmcertificatemanagement.controller
 
 import org.assertj.core.api.Assertions.assertThat
 import org.eclipse.tractusx.bpdmcertificatemanagement.config.CertificateClient
-import org.eclipse.tractusx.bpdmcertificatemanagement.dto.CertificateTypeDto
+import org.eclipse.tractusx.bpdmcertificatemanagement.data.CertificateTestValues
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.request.PaginationRequest
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.PageDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.repository.CertificateTypeRepository
@@ -53,12 +53,10 @@ internal class MetadataControllerIT @Autowired constructor(
         dbTestHelpers.truncateDbTables()
     }
 
-    val certificateValue = CertificateTypeDto("TypeCert01", "0.0.1")
-
     /** Register a new certificate type */
     @Test
     fun `insert Certificate Types`() {
-        certificateClient.metadataApi.setCertificateType(certificateValue)
+        certificateClient.metadataApi.setCertificateType(CertificateTestValues.certificateType)
         val certificateType = certificateTypeRepository.findAll()
         Assertions.assertNotEquals(certificateType, null)
     }
@@ -67,10 +65,10 @@ internal class MetadataControllerIT @Autowired constructor(
     @Test
     fun `insert duplicate Certificate Types`() {
         //Insert Once
-        certificateClient.metadataApi.setCertificateType(certificateValue)
+        certificateClient.metadataApi.setCertificateType(CertificateTestValues.certificateType)
 
         try {
-            certificateClient.metadataApi.setCertificateType(certificateValue)
+            certificateClient.metadataApi.setCertificateType(CertificateTestValues.certificateType)
         } catch (e: WebClientResponseException) {
             assertEquals(HttpStatus.CONFLICT, e.statusCode)
         }
@@ -82,7 +80,7 @@ internal class MetadataControllerIT @Autowired constructor(
     fun `insert wrong Certificate Types`() {
 
         try {
-            certificateClient.metadataApi.setCertificateType(certificateValue.copy(""))
+            certificateClient.metadataApi.setCertificateType(CertificateTestValues.certificateType.copy(""))
         } catch (e: WebClientResponseException) {
             assertEquals(HttpStatus.BAD_REQUEST, e.statusCode)
         }
@@ -92,7 +90,7 @@ internal class MetadataControllerIT @Autowired constructor(
     /** Gets a list of all currently registered certificate types */
     @Test
     fun `retrieve all Certificate Types`() {
-        certificateClient.metadataApi.setCertificateType(certificateValue)
+        certificateClient.metadataApi.setCertificateType(CertificateTestValues.certificateType)
         val certificates = certificateClient.metadataApi.getCertificateTypes(PaginationRequest(0,1))
 
         assertThat(certificates).isEqualTo(
@@ -101,7 +99,7 @@ internal class MetadataControllerIT @Autowired constructor(
                 totalPages = 1,
                 page = 0,
                 contentSize = 1,
-                content = listOf(certificateValue)
+                content = listOf(CertificateTestValues.certificateType)
         ))
     }
 
