@@ -73,7 +73,7 @@ spec:
       volumes:
         - name: bpdm-certificate-management
           configMap:
-            name: configMap
+            name: configmap
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
