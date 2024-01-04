@@ -119,6 +119,9 @@ applicationConfig:
   server:
     port: 8086
 
+configMap:
+  create: true
+
 # Used to overwrite the secret property values of the application configuration
 applicationSecrets:
 
