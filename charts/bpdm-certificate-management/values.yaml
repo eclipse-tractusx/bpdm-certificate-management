@@ -50,7 +50,7 @@ securityContext:
 
 service:
   type: ClusterIP
-  port: 8080
+  port: 8086
   targetPort: 8086
 
 autoscaling:
