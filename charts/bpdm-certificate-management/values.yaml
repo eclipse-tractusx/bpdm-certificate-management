@@ -56,6 +56,12 @@ service:
 autoscaling:
   enabled: false
 
+ingress:
+  enabled: false
+  annotations: {}
+  hosts: []
+  tls: []
+
 resources:
   limits:
     cpu: 500m
@@ -107,3 +113,17 @@ startupProbe:
   initialDelaySeconds: 60
   failureThreshold: 20
   periodSeconds: 15
+
+# Used to overwrite the default property values of the application configuration
+applicationConfig:
+  server:
+    port: 8086
+
+# Used to overwrite the secret property values of the application configuration
+applicationSecrets:
+
+postgres:
+  enabled: true
+  auth:
+    database: bpdm_certificates
+    username: bpdm_certificates

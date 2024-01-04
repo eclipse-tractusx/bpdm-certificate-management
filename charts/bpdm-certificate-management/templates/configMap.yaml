@@ -18,20 +18,11 @@
 # SPDX-License-Identifier: Apache-2.0
 ################################################################################
 
-apiVersion: v2
-type: application
-name: bpdm-certificate-management
-appVersion: "0.0.2"
-version: 0.0.1-alpha.2
-description: A Helm chart for deploying the BPDM Certificate Management application
-sources:
-  - https://github.com/eclipse-tractusx/bpdm-certificate-management
-dependencies:
-  - name: postgresql
-    version: 11.9.13
-    repository: https://charts.bitnami.com/bitnami
-    alias: postgres
-    condition: postgres.enabled
-maintainers:
-  - name: Sujit Karne
-  - name: Nico Koprowski
+{{ if .Values.configmap.create }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configMap
+data:
+  {{- toYaml .Values.configmap.data | nindent 2 }}
+{{ end }}

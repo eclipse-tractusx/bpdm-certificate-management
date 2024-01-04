@@ -20,10 +20,10 @@
 bpdm-cert:
   security:
     enabled: true
-    auth-server-url: http://localhost:8180
+    auth-server-url: https://centralidp.dev.demo.catena-x.net/auth
     auth-url: ${bpdm-cert.security.auth-server-url}/realms/${bpdm-cert.security.realm}/protocol/openid-connect/auth
     client-id: BPDM_CERT_MANAGEMENT
-    realm: master
+    realm: CX-Central
     refresh-url: ${bpdm-cert.security.token-url}
     token-url: ${bpdm-cert.security.auth-server-url}/realms/${bpdm-cert.security.realm}/protocol/openid-connect/token
 
