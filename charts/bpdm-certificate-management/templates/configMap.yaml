@@ -18,11 +18,21 @@
 # SPDX-License-Identifier: Apache-2.0
 ################################################################################
 
-{{ if .Values.configmap.create }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: configmap
+  name: {{include "bpdm-certificate-management.fullname" .}}
+  labels:
+    {{- include "bpdm-certificate-management.labels" . | nindent 4 }}
 data:
-  {{- toYaml .Values.configmap.data | nindent 2 }}
-{{ end }}
+  deployment.yml: |-
+    # Place for putting standard deployment configuration
+    # which can be overwritten by external.yml
+    bpdm:
+      datasource:
+        host: {{ include "bpdm-certificate-management.postgresDependency" . }}
+  external.yml: |-
+    # External properties for overwriting application config
+    {{- if .Values.applicationConfig }}
+    {{- .Values.applicationConfig | toYaml | nindent 4 }}
+    {{- end }}

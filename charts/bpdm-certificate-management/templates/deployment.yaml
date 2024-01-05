@@ -33,9 +33,10 @@ spec:
       {{- include "bpdm-certificate-management.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 8 }}
+        checksum/config: {{ include (print $.Template.BasePath "/configMap.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
         {{- include "bpdm-certificate-management.selectorLabels" . | nindent 8 }}
@@ -52,11 +53,13 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: {{ .Values.springProfiles | join "," }}
+            - name: SPRING_CONFIG_IMPORT
+              value: "/etc/conf/deployment.yml,/etc/conf/external.yml,/etc/conf/secrets.yml"
           ports:
             - name: http
               containerPort: 8086
@@ -70,10 +73,10 @@ spec:
             {{- toYaml .Values.startupProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-      volumes:
-        - name: bpdm-certificate-management
-          configMap:
-            name: configmap
+          volumeMounts:
+            - mountPath: /etc/conf
+              name: config
+              readOnly: true
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -86,3 +89,11 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      volumes:
+        - name: config
+          projected:
+            sources:
+              - configMap:
+                  name: {{ include "bpdm-certificate-management.fullname" . }}
+              - secret:
+                  name: {{ include "bpdm-certificate-management.fullname" . }}

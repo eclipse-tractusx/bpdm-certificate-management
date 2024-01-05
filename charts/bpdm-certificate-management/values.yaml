@@ -38,8 +38,6 @@ podAnnotations: {}
 springProfiles: []
 
 securityContext:
-  seccompProfile:
-    type: RuntimeDefault
   allowPrivilegeEscalation: false
   runAsNonRoot: true
   runAsUser: 10001
@@ -116,8 +114,9 @@ startupProbe:
 
 # Used to overwrite the default property values of the application configuration
 applicationConfig:
-  server:
-    port: 8086
+#  bpdm-cert:
+#    datasource:
+#      host: ...
 
 configmap:
   create: true
@@ -126,6 +125,8 @@ configmap:
 applicationSecrets:
 
 postgres:
+  # override the name of the postgres deploy
+  fullnameOverride: ""
   enabled: true
   auth:
     database: bpdm_certificates
