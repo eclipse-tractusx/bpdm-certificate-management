@@ -114,9 +114,9 @@ startupProbe:
 
 # Used to overwrite the default property values of the application configuration
 applicationConfig:
-#  bpdm-cert:
+#  spring:
 #    datasource:
-#      host: ...
+#      url: jdbc:postgresql://release-bpdm-cert-postgres:5432/bpdm_certificates
 
 configmap:
   create: true
