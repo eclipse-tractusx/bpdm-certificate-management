@@ -37,7 +37,7 @@ import org.eclipse.tractusx.bpdmcertificatemanagement.repository.CertificateType
 import org.springframework.data.domain.PageRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
-import java.util.UUID
+import java.util.*
 
 @Service
 class CertificateService(

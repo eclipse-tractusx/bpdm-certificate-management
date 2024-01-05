@@ -20,11 +20,7 @@
 package org.eclipse.tractusx.bpdmcertificatemanagement.dto.request
 
 import io.swagger.v3.oas.annotations.media.Schema
-import org.eclipse.tractusx.bpdmcertificatemanagement.dto.CertificateTypeDto
-import org.eclipse.tractusx.bpdmcertificatemanagement.dto.DocumentDto
-import org.eclipse.tractusx.bpdmcertificatemanagement.dto.EnclosedSiteDto
-import org.eclipse.tractusx.bpdmcertificatemanagement.dto.TrustLevelType
-import org.eclipse.tractusx.bpdmcertificatemanagement.dto.TrustValidatorDto
+import org.eclipse.tractusx.bpdmcertificatemanagement.dto.*
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.openapidescription.CommonDescription
 import java.time.ZonedDateTime
 

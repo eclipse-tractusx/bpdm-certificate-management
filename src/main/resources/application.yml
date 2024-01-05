@@ -45,9 +45,17 @@ spring:
         password: ''
         url: jdbc:postgresql://localhost:5432/bpdm_certificates
         username: bpdm_certificates
+    # Flyway configuration
+    flyway:
+        enabled: true
+        schemas: bpdm_certificates
     jpa:
         hibernate:
-            ddl-auto: update
+            ddl-auto: none
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        properties:
+            hibernate:
+                default_schema: bpdm_certificates
 
 springdoc:
     api-docs:
