@@ -23,7 +23,7 @@ import jakarta.persistence.EntityManager
 import jakarta.persistence.EntityManagerFactory
 import org.springframework.stereotype.Component
 
-private const val DB_SCHEMA_NAME: String = "public"
+private const val DB_SCHEMA_NAME: String = "bpdm_certificates"
 
 @Component
 class DbTestHelpers(entityManagerFactory: EntityManagerFactory) {
@@ -40,6 +40,7 @@ class DbTestHelpers(entityManagerFactory: EntityManagerFactory) {
                 FOR table_names IN SELECT table_name
                     FROM information_schema.tables
                     WHERE table_schema='$DB_SCHEMA_NAME'
+                    AND table_name NOT IN ('flyway_schema_history') 
                 LOOP 
                     EXECUTE format('TRUNCATE TABLE $DB_SCHEMA_NAME.%I CONTINUE IDENTITY CASCADE;', table_names.table_name);
                 END LOOP;
@@ -49,13 +50,5 @@ class DbTestHelpers(entityManagerFactory: EntityManagerFactory) {
 
         em.transaction.commit()
     }
-
-//    fun <T> assertRecursively(actual: T): RecursiveComparisonAssert<*> {
-//        return Assertions.assertThat(actual)
-//            .usingRecursiveComparison()
-//            .ignoringCollectionOrder()
-//            .ignoringAllOverriddenEquals()
-//            .ignoringFieldsOfTypes(Instant::class.java, LocalDateTime::class.java)
-//    }
 
 }
