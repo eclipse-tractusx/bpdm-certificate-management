@@ -1,5 +1,5 @@
-/*
- * Copyright (c) 2023 Contributors to the Eclipse Foundation
+/*******************************************************************************
+ * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -15,26 +15,21 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- */
+ ******************************************************************************/
 
 package org.eclipse.tractusx.bpdmcertificatemanagement.config
 
-import mu.KotlinLogging
-import org.springdoc.core.properties.SwaggerUiConfigProperties
+import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+import org.springframework.web.reactive.function.client.WebClient
 
 @Configuration
-class LandingPageConfig(
-    val swaggerProperties: SwaggerUiConfigProperties
-) : WebMvcConfigurer {
+class CertificateClientConfig {
 
-    private val logger = KotlinLogging.logger { }
-
-    override fun addViewControllers(registry: ViewControllerRegistry) {
-        val redirectUri = swaggerProperties.path
-        logger.info { "Set landing page to path '$redirectUri'" }
-        registry.addRedirectViewController("/", redirectUri)
+    @Bean
+    fun certificateClient(webServerAppCtxt: ServletWebServerApplicationContext): CertificateClient {
+        return CertificateClientImpl { WebClient.create("http://localhost:${webServerAppCtxt.webServer.port}") }
     }
+
 }
