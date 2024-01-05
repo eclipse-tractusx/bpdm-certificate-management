@@ -30,7 +30,7 @@
 
     <groupId>org.eclipse.tractusx</groupId>
     <artifactId>bpdm-certificate-management</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.3-SNAPSHOT</version>
     <name>bpdm-certificate-management</name>
     <description>bpdm-certificate-management</description>
 
@@ -161,6 +161,10 @@
             <artifactId>postgresql</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
     </dependencies>
 
     <pluginRepositories>
@@ -232,7 +236,6 @@
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.eclipse.dash</groupId>
                 <artifactId>license-tool-plugin</artifactId>
@@ -241,7 +244,10 @@
                     <projectId>automotive.tractusx</projectId>
                 </configuration>
             </plugin>
-
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+            </plugin>
         </plugins>
     </build>
 
