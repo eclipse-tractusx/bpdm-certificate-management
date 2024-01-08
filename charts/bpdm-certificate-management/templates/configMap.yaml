@@ -18,20 +18,21 @@
 # SPDX-License-Identifier: Apache-2.0
 ################################################################################
 
-apiVersion: v2
-type: application
-name: bpdm-certificate-management
-appVersion: "0.0.4"
-version: 0.0.1-alpha.12
-description: A Helm chart for deploying the BPDM Certificate Management application
-sources:
-  - https://github.com/eclipse-tractusx/bpdm-certificate-management
-dependencies:
-  - name: postgresql
-    version: 11.9.13
-    repository: https://charts.bitnami.com/bitnami
-    alias: postgres
-    condition: postgres.enabled
-maintainers:
-  - name: Sujit Karne
-  - name: Nico Koprowski
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{include "bpdm-certificate-management.fullname" .}}
+  labels:
+    {{- include "bpdm-certificate-management.labels" . | nindent 4 }}
+data:
+  deployment.yml: |-
+    # Place for putting standard deployment configuration
+    # which can be overwritten by external.yml
+    bpdm:
+      datasource:
+        host: {{ include "bpdm-certificate-management.postgresDependency" . }}
+  external.yml: |-
+    # External properties for overwriting application config
+    {{- if .Values.applicationConfig }}
+    {{- .Values.applicationConfig | toYaml | nindent 4 }}
+    {{- end }}

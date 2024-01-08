@@ -30,7 +30,7 @@
 
     <groupId>org.eclipse.tractusx</groupId>
     <artifactId>bpdm-certificate-management</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.0.4-SNAPSHOT</version>
     <name>bpdm-certificate-management</name>
     <description>bpdm-certificate-management</description>
 
