@@ -33,9 +33,10 @@ spec:
       {{- include "bpdm-certificate-management.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
-        {{- toYaml . | nindent 8 }}
+        checksum/config: {{ include (print $.Template.BasePath "/configMap.yaml") . | sha256sum }}
+      {{- with .Values.podAnnotations }}
+      {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
         {{- include "bpdm-certificate-management.selectorLabels" . | nindent 8 }}
@@ -52,11 +53,23 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: {{ .Values.springProfiles | join "," }}
+            - name: BPDM-CERT_DATASOURCE_HOST
+              value: {{ include "bpdm-certificate-management.postgresDependency" . }}
+            - name: SPRING_CONFIG_IMPORT
+              value: "/etc/conf/deployment.yml,/etc/conf/external.yml,/etc/conf/secrets.yml"
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "bpdm-certificate-management.postgresDependency" . }}
+                  key: password
           ports:
             - name: http
-              containerPort: 8084
+              containerPort: 8086
               protocol: TCP
           # @url: https://cloud.google.com/blog/products/containers-kubernetes/kubernetes-best-practices-setting-up-health-checks-with-readiness-and-liveness-probes
           livenessProbe:
@@ -67,6 +80,10 @@ spec:
             {{- toYaml .Values.startupProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - mountPath: /etc/conf
+              name: config
+              readOnly: true
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -79,3 +96,11 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      volumes:
+        - name: config
+          projected:
+            sources:
+              - configMap:
+                  name: {{ include "bpdm-certificate-management.fullname" . }}
+              - secret:
+                  name: {{ include "bpdm-certificate-management.fullname" . }}
