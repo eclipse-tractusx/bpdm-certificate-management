@@ -125,8 +125,6 @@ configmap:
 applicationSecrets:
 
 postgres:
-  # override the name of the postgres deploy
-  fullnameOverride: ""
   enabled: true
   auth:
     database: bpdm_certificates
