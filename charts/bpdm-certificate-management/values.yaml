@@ -38,8 +38,6 @@ podAnnotations: {}
 springProfiles: []
 
 securityContext:
-  seccompProfile:
-    type: RuntimeDefault
   allowPrivilegeEscalation: false
   runAsNonRoot: true
   runAsUser: 10001
@@ -50,11 +48,17 @@ securityContext:
 
 service:
   type: ClusterIP
-  port: 8080
+  port: 8086
   targetPort: 8086
 
 autoscaling:
   enabled: false
+
+ingress:
+  enabled: false
+  annotations: {}
+  hosts: []
+  tls: []
 
 resources:
   limits:
@@ -107,3 +111,21 @@ startupProbe:
   initialDelaySeconds: 60
   failureThreshold: 20
   periodSeconds: 15
+
+# Used to overwrite the default property values of the application configuration
+applicationConfig:
+#  spring:
+#    datasource:
+#      url: jdbc:postgresql://release-bpdm-cert-postgres:5432/bpdm_certificates
+
+configmap:
+  create: true
+
+# Used to overwrite the secret property values of the application configuration
+applicationSecrets:
+
+postgres:
+  enabled: true
+  auth:
+    database: bpdm_certificates
+    username: bpdm_certificates
