@@ -62,7 +62,7 @@ interface MetadataApi {
         description = "Get a list of all currently registered certificate types.",
         responses = [
             ApiResponse(responseCode = "200", description = "List of registered certificate types, or can be empty"),
-            ApiResponse(responseCode = "400", description = "Malformed URL")
+            ApiResponse(responseCode = "400", description = "Malformed URL", content = [Content()])
         ]
     )
     @GetMapping("/certificate-types")

@@ -24,7 +24,8 @@ bpdm-cert:
     name: "BPDM Certificate Management"
     description: "Service that manages and shares business partner certificates"
     version: "0.0.1"
-
+    datasource:
+        host: localhost
     security:
         enabled: false
 
@@ -43,7 +44,7 @@ spring:
     datasource:
         driverClassName: org.postgresql.Driver
         password: ''
-        url: jdbc:postgresql://localhost:5432/bpdm_certificates
+        url: jdbc:postgresql://${bpdm-cert.datasource.host}:5432/bpdm_certificates
         username: bpdm_certificates
     # Flyway configuration
     flyway:

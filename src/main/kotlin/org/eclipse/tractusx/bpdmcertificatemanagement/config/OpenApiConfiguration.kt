@@ -22,8 +22,7 @@ package org.eclipse.tractusx.bpdmcertificatemanagement.config
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Info
-import io.swagger.v3.oas.models.security.SecurityRequirement
-import io.swagger.v3.oas.models.security.SecurityScheme
+import io.swagger.v3.oas.models.security.*
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -42,19 +41,19 @@ class OpenApiConfiguration (
     private fun OpenAPI.withSecurity(): OpenAPI {
         return this.components(
             Components()
-//                .addSecuritySchemes(
-//                    "open_id_scheme",
-//                    SecurityScheme().type(SecurityScheme.Type.OAUTH2).flows(
-//                        OAuthFlows().authorizationCode(
-//                            OAuthFlow().authorizationUrl(securityProperties.authUrl)
-//                                .tokenUrl(securityProperties.tokenUrl)
-//                                .refreshUrl(securityProperties.refreshUrl)
-//                                .scopes(Scopes())
-//                        ).clientCredentials(
-//                            OAuthFlow().tokenUrl(securityProperties.tokenUrl)
-//                        )
-//                    )
-//                )
+                .addSecuritySchemes(
+                    "open_id_scheme",
+                    SecurityScheme().type(SecurityScheme.Type.OAUTH2).flows(
+                        OAuthFlows().authorizationCode(
+                            OAuthFlow().authorizationUrl(securityProperties.authUrl)
+                                .tokenUrl(securityProperties.tokenUrl)
+                                .refreshUrl(securityProperties.refreshUrl)
+                                .scopes(Scopes())
+                        ).clientCredentials(
+                            OAuthFlow().tokenUrl(securityProperties.tokenUrl)
+                        )
+                    )
+                )
                 .addSecuritySchemes(
                     "bearer_scheme",
                     SecurityScheme().type(SecurityScheme.Type.HTTP)
@@ -62,7 +61,7 @@ class OpenApiConfiguration (
                         .bearerFormat("JWT")
                 )
         )
-            //.addSecurityItem(SecurityRequirement().addList("open_id_scheme", emptyList()))
+            .addSecurityItem(SecurityRequirement().addList("open_id_scheme", emptyList()))
             .addSecurityItem(SecurityRequirement().addList("bearer_scheme", emptyList()))
     }
 
