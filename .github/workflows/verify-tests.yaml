@@ -1,0 +1,48 @@
+name: Maven Test Execution
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+  workflow_call:
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_BUILDKIT: 1
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build docker image certificate-management
+        run: docker build -f docker/Dockerfile  -t bpdm-certificate-management .
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+
+      #Use Maven package cache
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      #Verify with tests
+      - name: Verify
+        run: ./mvnw -B verify
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
