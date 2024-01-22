@@ -61,9 +61,9 @@ interface CertificateApi {
 
 
     @Operation(
-        summary = "Request a specific certificate document for a given BPN.",
+        summary = "Request a specific certificate document for a given Document ID.",
         operationId = "retrieveCertificateDocument",
-        description = "This endpoint call to request a specific certificate document for a given BPN.",
+        description = "This endpoint call to request a specific certificate document for a given Document ID.",
         responses = [
             ApiResponse(responseCode = "200", description = "Document for the given id"),
             ApiResponse(responseCode = "400", description = "Malformed URL", content = [Content()]),
@@ -81,7 +81,7 @@ interface CertificateApi {
     @Operation(
         summary = "Get all certificates of a given BPN.",
         operationId = "getCertificatesByBpnPaginated",
-        description = "This endpoint retrieves all certificates available for the BPN are returned. " +
+        description = "This endpoint retrieves all certificates available for the inserted BPN. " +
                 "In case of BPNL,  all certificates available for the BPN are returned. " +
                 "In case of a BPNS, all certificates which either are assigned to the BPNS or the matching BPNL enclosing BPNS are returned.",
         responses = [
