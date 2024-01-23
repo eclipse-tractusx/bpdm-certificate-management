@@ -63,40 +63,31 @@ jobs:
         run: |
           npm i -g swaggerhub-cli
 
+      - name: Build and run Docker Compose
+        run: docker-compose up -d
+
       - name: Extract versions
         run: |
-          if [ -z "${{ inputs.downstream-version }}" ]; then
+          if [ -z "${{ inputs.version }}" ]; then
             export DOWNSTREAM_VERSION=$(grep -A1 '<artifactId>bpdm-certificate-management</artifactId>' pom.xml | grep '<version>' | awk -F '>' '{print $2}' | awk -F '<' '{print $1}')
           else
-            export DOWNSTREAM_VERSION="${{ inputs.downstream-version }}"
+            export DOWNSTREAM_VERSION="${{ inputs.version }}"
           fi
-
+          
           echo "DOWNSTREAM_VERSION=${DOWNSTREAM_VERSION}" >> "$GITHUB_ENV"
 
       - name: Create and Download API specs
         shell: bash
         run: |
-          echo "[INFO] - Create the docker network"
-          docker network create bpdm-network
           echo "[INFO] - Compiling the project"
           mvn -B clean install -DskipTests
-          echo "[INFO] - Building a docker image - bpdm-certificate-management:test"
-          docker build -f docker/Dockerfile . --tag bpdm-certificate-management:test
-          echo "[INFO] - Starting a docker container for bpdm-certificate-postgres database"
-          docker run -d --name bpdm-certificate-postgres --network bpdm-network -e POSTGRES_USER=bpdm_certificates -e POSTGRES_PASSWORD= -e POSTGRES_DB=bpdm_certificates -e POSTGRES_HOST_AUTH_METHOD=trust -p 5432:5432 -v bpdm-certificate-postgres-data:/var/lib/postgresql/data postgres:14.2
-          echo "[INFO] - Wait for some seconds until the docker container comes up"
-          sleep 20
-          echo "[INFO] - Starting a docker container to download API specs - bpdm-certificate-management"
-          docker run -d --name bpdm-certificate-management --network bpdm-network -e SPRING_DATASOURCE_PASSWORD= -e BPDM-CERT_DATASOURCE_HOST=bpdm-certificate-postgres -p 8086:8086 bpdm-certificate-management:test
-          echo "[INFO] - Wait for some seconds until the docker container comes up"
-          sleep 20
+          echo "[INFO] - Running the bpdm certificate management application to generate API docs"
+          java -jar target/bpdm-certificate-management.jar &
+          echo "[INFO] - Wait for some seconds until the application comes up"
+          sleep 30
           curl -X GET http://localhost:8086/docs/api-docs.yaml > ./tractusx-bpdm-certificate-api.yaml
-          echo "[INFO] - Stopping and removing docker container"
-          docker stop bpdm-certificate-management
-          docker stop bpdm-certificate-postgres
-          docker rm bpdm-certificate-management
-          docker rm bpdm-certificate-postgres
-          docker network rm bpdm-network
+          echo "[INFO] - Stopping the bpdm certificate management application"
+          pkill -f "bpdm-certificate-management"
 
       # create API, will fail if exists
       - name: Create API
@@ -115,3 +106,7 @@ jobs:
             echo "[INFO] - snapshot, will set the API to 'unpublished'";
             swaggerhub api:update ${{ env.SWAGGERHUB_USER }}/bpdm-certificate-management/${{ env.DOWNSTREAM_VERSION }} -f ./tractusx-bpdm-certificate-api.yaml --visibility=public --published=unpublish
           fi
+
+      # Stop Docker compose services
+      - name: Stop Docker Compose services
+        run: docker-compose down
