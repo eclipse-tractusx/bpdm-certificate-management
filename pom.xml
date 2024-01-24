@@ -40,6 +40,11 @@
         <springdoc.version>2.0.0</springdoc.version>
         <kotlinlogging.version>2.1.23</kotlinlogging.version>
         <testcontainers.version>1.18.3</testcontainers.version>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.organization>eclipse-tractusx</sonar.organization>
+        <sonar.projectKey>eclipse-tractusx_bpdm-certificate-management</sonar.projectKey>
+        <sonar.projectName>bpdm-certificate-management</sonar.projectName>
+        <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
     </properties>
 
     <dependencies>
