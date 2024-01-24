@@ -45,6 +45,7 @@
         <sonar.projectKey>eclipse-tractusx_bpdm-certificate-management</sonar.projectKey>
         <sonar.projectName>bpdm-certificate-management</sonar.projectName>
         <sonar.moduleKey>${project.groupId}:${project.artifactId}</sonar.moduleKey>
+        <sonar.version>3.9.1.2184</sonar.version>
     </properties>
 
     <dependencies>
@@ -223,6 +224,11 @@
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>${sonar.version}</version>
             </plugin>
         </plugins>
     </build>
