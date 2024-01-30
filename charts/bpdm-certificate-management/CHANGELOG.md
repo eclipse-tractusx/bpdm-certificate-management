@@ -9,4 +9,4 @@ The format is based on Keep a Changelog (https://keepachangelog.com/en/1.0.0/),
 ### Added
 
 - Helm Charts for BPDM Certificate Management Application
-- Onboarding new BPDM-Certificate-Application 
+- Onboarding new BPDM-Certificate-Application
