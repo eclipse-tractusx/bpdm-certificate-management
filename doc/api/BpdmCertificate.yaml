@@ -20,7 +20,7 @@ openapi: 3.0.1
 info:
   title: BPDM Certificate Management
   description: Service that manages and shares business partner certificates
-  version: 0.0.4
+  version: 1.0.1-SNAPSHOT
 servers:
   - url: http://localhost:8086
     description: Generated server url

@@ -23,7 +23,7 @@ server:
 bpdm-cert:
     name: "BPDM Certificate Management"
     description: "Service that manages and shares business partner certificates"
-    version: "0.0.1"
+    version: '@project.version@'
     datasource:
         host: localhost
     security:
