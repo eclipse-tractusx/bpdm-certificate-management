@@ -30,6 +30,7 @@ import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateDB
 import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateTypeDB
 import org.eclipse.tractusx.bpdmcertificatemanagement.exception.*
 import org.eclipse.tractusx.bpdmcertificatemanagement.repository.CertificateRepository
+import org.eclipse.tractusx.bpdmcertificatemanagement.exception.*
 import org.eclipse.tractusx.bpdmcertificatemanagement.repository.CertificateTypeRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.http.ResponseEntity
@@ -189,6 +190,13 @@ class CertificateService(
         certificateDocumentRequestDto.issuer?.let { validateBPNLFormat (it) }
         certificateDocumentRequestDto.uploader?.let { validateBPNLFormat (it) }
         certificateDocumentRequestDto.validator?.validatorBpn?.let {  validateBPNLFormat (it)}
+
+        certificateDocumentRequestDto.enclosedSites?.forEach { enclosed ->
+            if (enclosed.siteBpn.length != 16 || !enclosed.siteBpn.startsWith("BPNS") || !enclosed.siteBpn.substring(4, 12).all { it.isDigit() } ||
+                !enclosed.siteBpn.substring(12).all { it.isLetterOrDigit() }) {
+                throw InvalidSiteFormatException(enclosed.siteBpn)
+            }
+        }
 
     }
 
