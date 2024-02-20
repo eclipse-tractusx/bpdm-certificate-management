@@ -41,17 +41,6 @@ class CertificateControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorResponse)
     }
 
-    @ExceptionHandler(InvalidBpnFormatException::class)
-    fun handleBusinessPartnerDetails(ex: InvalidBpnFormatException, request: WebRequest): ResponseEntity<CustomErrorResponse> {
-        val errorResponse = CustomErrorResponse(
-            timestamp = ZonedDateTime.now(),
-            status = HttpStatus.BAD_REQUEST,
-            error = ex.message.toString(),
-            path = request.getDescription(false)
-        )
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse)
-    }
-
     @ExceptionHandler(CertificateNotExists::class)
     fun handleCertificateNotExists(ex: CertificateNotExists, request: WebRequest): ResponseEntity<CustomErrorResponse> {
         val errorResponse = CustomErrorResponse(
@@ -94,6 +83,30 @@ class CertificateControllerExceptionHandler {
             path = request.getDescription(false)
         )
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse)
+    }
+
+    //BPN Verification Exception Handlers
+
+    @ExceptionHandler(InvalidBpnLegalEntityException::class)
+    fun handleBusinessPartnerDetails(ex: InvalidBpnLegalEntityException, request: WebRequest): ResponseEntity<CustomErrorResponse> {
+        val errorResponse = CustomErrorResponse(
+            timestamp = ZonedDateTime.now(),
+            status = HttpStatus.BAD_REQUEST,
+            error = ex.message.toString(),
+            path = request.getDescription(false)
+        )
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse)
+    }
+
+    @ExceptionHandler(InvalidBpnLSAException::class)
+    fun handleInvalidBpnLSAValues(ex: InvalidBpnLSAException, request: WebRequest): ResponseEntity<CustomErrorResponse> {
+        val errorResponse = CustomErrorResponse(
+            timestamp = ZonedDateTime.now(),
+            status = HttpStatus.BAD_REQUEST,
+            error = ex.message.toString(),
+            path = request.getDescription(false)
+        )
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse)
     }
 
 }

@@ -28,10 +28,7 @@ import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateRe
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.PageDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateDB
 import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateTypeDB
-import org.eclipse.tractusx.bpdmcertificatemanagement.exception.CertificateDocumentIdNotFound
-import org.eclipse.tractusx.bpdmcertificatemanagement.exception.CertificateNotExists
-import org.eclipse.tractusx.bpdmcertificatemanagement.exception.CertificateTypeNotExists
-import org.eclipse.tractusx.bpdmcertificatemanagement.exception.InvalidBpnFormatException
+import org.eclipse.tractusx.bpdmcertificatemanagement.exception.*
 import org.eclipse.tractusx.bpdmcertificatemanagement.repository.CertificateRepository
 import org.eclipse.tractusx.bpdmcertificatemanagement.repository.CertificateTypeRepository
 import org.springframework.data.domain.PageRequest
@@ -85,7 +82,8 @@ class CertificateService(
         return when {
             bpn.startsWith("BPNL") -> findCertificateByBusinessPartnerNumber(bpn, certificateType)
             bpn.startsWith("BPNS") -> findCertificateByEnclosedSitesSiteBpn(bpn, certificateType)
-            else -> throw InvalidBpnFormatException(bpn)
+            bpn.startsWith("BPNA") -> findCertificateByEnclosedSitesSiteBpn(bpn, certificateType)
+            else -> throw InvalidBpnLSAException(bpn)
         }
 
     }
@@ -138,7 +136,7 @@ class CertificateService(
                 certificates.toPageDto(certificateMapping::toCertificateResponseDto)
             }
 
-            bpn.startsWith("BPNS") -> {
+            bpn.startsWith("BPNS") || bpn.startsWith("BPNA") -> {
                 val certificates = certificateRepository.findByEnclosedSitesSiteBpn(bpn, pageRequest)
                 if (certificates.totalElements == 0L) {
                     throw CertificateNotExists(objectTypeSite, bpn)
@@ -147,7 +145,7 @@ class CertificateService(
             }
 
             else -> {
-                throw InvalidBpnFormatException(bpn)
+                throw InvalidBpnLSAException(bpn)
             }
         }
 
@@ -172,7 +170,7 @@ class CertificateService(
                 certificates.toPageDto(certificateMapping::toCertificateResponseDto)
             }
 
-            bpn.startsWith("BPNS") -> {
+            bpn.startsWith("BPNS") || bpn.startsWith("BPNA") -> {
                 val certificates = certificateRepository.findByEnclosedSitesSiteBpnAndTypeCertificateType(bpn, certificateType, pageRequest)
                 if (certificates.totalElements == 0L) {
                     throw CertificateNotExists(objectTypeSite, bpn)
@@ -181,21 +179,28 @@ class CertificateService(
             }
 
             else -> {
-                throw InvalidBpnFormatException(bpn)
+                throw InvalidBpnLSAException(bpn)
             }
         }
     }
 
     private fun validateCertificateBeforeProcess(certificateDocumentRequestDto: CertificateDocumentRequestDto) {
-        validateBPNFormat(certificateDocumentRequestDto.businessPartnerNumber, "BPNL")
-        certificateDocumentRequestDto.issuer?.let { validateBPNFormat(it, "BPN") }
-        certificateDocumentRequestDto.uploader?.let { validateBPNFormat(it, "BPNL") }
+
+        validateBPNLFormat (certificateDocumentRequestDto.businessPartnerNumber)
+        certificateDocumentRequestDto.issuer?.let { validateBPNLFormat (it) }
+        certificateDocumentRequestDto.uploader?.let { validateBPNLFormat (it) }
+        certificateDocumentRequestDto.validator?.validatorBpn?.let {  validateBPNLFormat (it)}
+
     }
 
-    private fun validateBPNFormat(bpn: String, prefix: String) {
-        if (bpn.isBlank() || !bpn.startsWith(prefix)) {
-            throw InvalidBpnFormatException(bpn)
+    private fun validateBPNLFormat(bpn: String) {
+
+        val regexPattern = Regex("^BPNL[0-9]{8}[a-zA-Z0-9]{4}\$")
+
+        if (bpn.isBlank() || !regexPattern.matches(bpn)) {
+            throw InvalidBpnLegalEntityException(bpn)
         }
+
     }
 
     private fun findCertificateType(typeDto: CertificateTypeDto): CertificateTypeDB {
