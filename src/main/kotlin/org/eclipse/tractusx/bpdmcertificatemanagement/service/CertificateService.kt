@@ -82,7 +82,6 @@ class CertificateService(
         return when {
             bpn.startsWith("BPNL") -> findCertificateByBusinessPartnerNumber(bpn, certificateType)
             bpn.startsWith("BPNS") -> findCertificateByEnclosedSitesSiteBpn(bpn, certificateType)
-            bpn.startsWith("BPNA") -> findCertificateByEnclosedSitesSiteBpn(bpn, certificateType)
             else -> throw InvalidBpnLSAException(bpn)
         }
 
@@ -136,7 +135,7 @@ class CertificateService(
                 certificates.toPageDto(certificateMapping::toCertificateResponseDto)
             }
 
-            bpn.startsWith("BPNS") || bpn.startsWith("BPNA") -> {
+            bpn.startsWith("BPNS") -> {
                 val certificates = certificateRepository.findByEnclosedSitesSiteBpn(bpn, pageRequest)
                 if (certificates.totalElements == 0L) {
                     throw CertificateNotExists(objectTypeSite, bpn)
@@ -170,7 +169,7 @@ class CertificateService(
                 certificates.toPageDto(certificateMapping::toCertificateResponseDto)
             }
 
-            bpn.startsWith("BPNS") || bpn.startsWith("BPNA") -> {
+            bpn.startsWith("BPNS") -> {
                 val certificates = certificateRepository.findByEnclosedSitesSiteBpnAndTypeCertificateType(bpn, certificateType, pageRequest)
                 if (certificates.totalElements == 0L) {
                     throw CertificateNotExists(objectTypeSite, bpn)
@@ -195,9 +194,8 @@ class CertificateService(
 
     private fun validateBPNLFormat(bpn: String) {
 
-        val regexPattern = Regex("^BPNL[0-9]{8}[a-zA-Z0-9]{4}\$")
-
-        if (bpn.isBlank() || !regexPattern.matches(bpn)) {
+        if (bpn.isBlank() || bpn.length != 16 || !bpn.startsWith("BPNL") || !bpn.substring(4, 12).all { it.isDigit() } ||
+            !bpn.substring(12).all { it.isLetterOrDigit() }) {
             throw InvalidBpnLegalEntityException(bpn)
         }
 
