@@ -33,13 +33,9 @@ import org.springdoc.core.annotations.ParameterObject
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.service.annotation.GetExchange
-import org.springframework.web.service.annotation.HttpExchange
-import org.springframework.web.service.annotation.PostExchange
 import java.util.*
 
 @RequestMapping("/api/catena", produces = [MediaType.APPLICATION_JSON_VALUE])
-@HttpExchange("/api/catena")
 interface CertificateApi {
 
     @Operation(
@@ -56,7 +52,6 @@ interface CertificateApi {
         ]
     )
     @PostMapping("/certificate/document")
-    @PostExchange("/certificate/document")
     fun setCertificateDocument(@RequestBody certificateDocumentRequestDto: CertificateDocumentRequestDto): ResponseEntity<CertificateDocumentResponseDto>
 
 
@@ -74,7 +69,6 @@ interface CertificateApi {
         ]
     )
     @GetMapping("/certificate/document/{cdID}")
-    @GetExchange("/certificate/document/{cdID}")
     fun getCertificateDocument(@Parameter(description = "Certificate document ID") @PathVariable cdID: UUID): ResponseEntity<CertificateDocumentResponseDto>
 
 
@@ -93,7 +87,6 @@ interface CertificateApi {
         ]
     )
     @GetMapping("/certificate/{bpn}")
-    @GetExchange("/certificate/{bpn}")
     fun getCertificatesByBpnPaginated(
         @Parameter(
             description = "BPN value, It can be BPNL, BPNS, BPNA",
@@ -115,7 +108,6 @@ interface CertificateApi {
         ]
     )
     @GetMapping("/certificate/{bpn}/{certificateType}")
-    @GetExchange("/certificate/{bpn}/{certificateType}")
     fun getCertificateByTypeAndBpnPaginated(
         @Parameter(description = "BPN value, It can be BPNL, BPNS, BPNA", required = true) @PathVariable("bpn") bpn: String,
         @Parameter(description = "Certificate type e.g. IATF-16949", required = true) @PathVariable("certificateType") certificateType: String,
@@ -135,7 +127,6 @@ interface CertificateApi {
         ]
     )
     @GetMapping("/certificate/simple/{bpn}/{certificateType}")
-    @GetExchange("/certificate/simple/{bpn}/{certificateType}")
     fun checkCertificateByBpnAndType(
         @Parameter(description = "Business Partner Number", required = true) @PathVariable bpn: String,
         @Parameter(description = "Certificate Type", required = true) @PathVariable certificateType: String

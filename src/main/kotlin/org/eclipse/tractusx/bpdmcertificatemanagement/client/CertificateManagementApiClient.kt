@@ -1,5 +1,5 @@
-/*******************************************************************************
- * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+/*
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -15,16 +15,14 @@
  * under the License.
  *
  * SPDX-License-Identifier: Apache-2.0
- ******************************************************************************/
+ */
 
-package org.eclipse.tractusx.bpdmcertificatemanagement.config
+package org.eclipse.tractusx.bpdmcertificatemanagement.client
 
-import org.eclipse.tractusx.bpdmcertificatemanagement.controller.CertificateApi
-import org.eclipse.tractusx.bpdmcertificatemanagement.controller.MetadataApi
+interface CertificateManagementApiClient {
 
-interface CertificateClient {
+    val certificateApi: CertificateApiClient
 
-    val certificateApi: CertificateApi
+    val metadataApi: MetadataApiClient
 
-    val metadataApi: MetadataApi
 }

@@ -20,7 +20,7 @@
 package org.eclipse.tractusx.bpdmcertificatemanagement.controller
 
 import org.assertj.core.api.AssertionsForClassTypes.assertThat
-import org.eclipse.tractusx.bpdmcertificatemanagement.config.CertificateClient
+import org.eclipse.tractusx.bpdmcertificatemanagement.client.CertificateManagementApiClient
 import org.eclipse.tractusx.bpdmcertificatemanagement.data.CertificateTestValues
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.*
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.request.PaginationRequest
@@ -45,7 +45,7 @@ import java.util.*
 @ActiveProfiles("test")
 @ContextConfiguration(initializers = [PostgreSQLContextInitializer::class])
 internal class CertificateControllerIT @Autowired constructor(
-    val certificateClient: CertificateClient,
+    val certificateClient: CertificateManagementApiClient,
     private val certificateRepository: CertificateRepository,
     private val dbTestHelpers: DbTestHelpers
 ) {

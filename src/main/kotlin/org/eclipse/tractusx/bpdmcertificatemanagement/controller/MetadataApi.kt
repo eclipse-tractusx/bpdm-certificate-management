@@ -32,13 +32,9 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.service.annotation.GetExchange
-import org.springframework.web.service.annotation.HttpExchange
-import org.springframework.web.service.annotation.PostExchange
 import javax.validation.Valid
 
 @RequestMapping("/api/catena", produces = [MediaType.APPLICATION_JSON_VALUE])
-@HttpExchange("/api/catena")
 interface MetadataApi {
 
     @Operation(
@@ -52,7 +48,6 @@ interface MetadataApi {
         ]
     )
     @PostMapping("/certificate-types")
-    @PostExchange("/certificate-types")
     fun setCertificateType(@Parameter(description = "", required = true) @Valid @RequestBody certificateTypeDto: CertificateTypeDto): CertificateTypeDto
 
 
@@ -66,7 +61,6 @@ interface MetadataApi {
         ]
     )
     @GetMapping("/certificate-types")
-    @GetExchange("/certificate-types")
     fun getCertificateTypes(@ParameterObject paginationRequest: PaginationRequest): PageDto<CertificateTypeDto>
 
 }
