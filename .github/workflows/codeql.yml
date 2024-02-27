@@ -1,5 +1,5 @@
 ################################################################################
-# Copyright (c) 2023 Contributors to the Eclipse Foundation
+# Copyright (c) 2024 Contributors to the Eclipse Foundation
 #
 # See the NOTICE file(s) distributed with this work for additional
 # information regarding copyright ownership.
@@ -79,7 +79,6 @@ jobs:
     
     - name: Build with Maven
       run: mvn clean package -B -Dmaven.test.skip 
-
 
     # Autobuild attempts to build any compiled languages (C/C++, C#, Go, Java, or Swift).
     # If this step fails, then you should remove it and run the build manually (see below)
