@@ -19,6 +19,7 @@
 
 package org.eclipse.tractusx.bpdmcertificatemanagement.exception
 
-class InvalidBpnFormatException(
-    identifier: String
-): RuntimeException("The bpn value $identifier is not a valid business partner number of Legal Entity or Site")
+class InvalidBpnLegalEntityException(
+    bpn: String
+): RuntimeException("The bpn value $bpn is not a valid business partner number of Legal Entity. " +
+        "Format should follow the following example: BPNL12345678ABCD")

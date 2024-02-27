@@ -28,10 +28,7 @@ import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateRe
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.PageDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateDB
 import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateTypeDB
-import org.eclipse.tractusx.bpdmcertificatemanagement.exception.CertificateDocumentIdNotFound
-import org.eclipse.tractusx.bpdmcertificatemanagement.exception.CertificateNotExists
-import org.eclipse.tractusx.bpdmcertificatemanagement.exception.CertificateTypeNotExists
-import org.eclipse.tractusx.bpdmcertificatemanagement.exception.InvalidBpnFormatException
+import org.eclipse.tractusx.bpdmcertificatemanagement.exception.*
 import org.eclipse.tractusx.bpdmcertificatemanagement.repository.CertificateRepository
 import org.eclipse.tractusx.bpdmcertificatemanagement.repository.CertificateTypeRepository
 import org.springframework.data.domain.PageRequest
@@ -85,7 +82,7 @@ class CertificateService(
         return when {
             bpn.startsWith("BPNL") -> findCertificateByBusinessPartnerNumber(bpn, certificateType)
             bpn.startsWith("BPNS") -> findCertificateByEnclosedSitesSiteBpn(bpn, certificateType)
-            else -> throw InvalidBpnFormatException(bpn)
+            else -> throw InvalidBpnLSAException(bpn)
         }
 
     }
@@ -147,7 +144,7 @@ class CertificateService(
             }
 
             else -> {
-                throw InvalidBpnFormatException(bpn)
+                throw InvalidBpnLSAException(bpn)
             }
         }
 
@@ -181,21 +178,27 @@ class CertificateService(
             }
 
             else -> {
-                throw InvalidBpnFormatException(bpn)
+                throw InvalidBpnLSAException(bpn)
             }
         }
     }
 
     private fun validateCertificateBeforeProcess(certificateDocumentRequestDto: CertificateDocumentRequestDto) {
-        validateBPNFormat(certificateDocumentRequestDto.businessPartnerNumber, "BPNL")
-        certificateDocumentRequestDto.issuer?.let { validateBPNFormat(it, "BPN") }
-        certificateDocumentRequestDto.uploader?.let { validateBPNFormat(it, "BPNL") }
+
+        validateBPNLFormat (certificateDocumentRequestDto.businessPartnerNumber)
+        certificateDocumentRequestDto.issuer?.let { validateBPNLFormat (it) }
+        certificateDocumentRequestDto.uploader?.let { validateBPNLFormat (it) }
+        certificateDocumentRequestDto.validator?.validatorBpn?.let {  validateBPNLFormat (it)}
+
     }
 
-    private fun validateBPNFormat(bpn: String, prefix: String) {
-        if (bpn.isBlank() || !bpn.startsWith(prefix)) {
-            throw InvalidBpnFormatException(bpn)
+    private fun validateBPNLFormat(bpn: String) {
+
+        if (bpn.isBlank() || bpn.length != 16 || !bpn.startsWith("BPNL") || !bpn.substring(4, 12).all { it.isDigit() } ||
+            !bpn.substring(12).all { it.isLetterOrDigit() }) {
+            throw InvalidBpnLegalEntityException(bpn)
         }
+
     }
 
     private fun findCertificateType(typeDto: CertificateTypeDto): CertificateTypeDB {

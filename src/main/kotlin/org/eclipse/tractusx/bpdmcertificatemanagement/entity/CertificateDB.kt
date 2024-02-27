@@ -32,7 +32,7 @@ import java.util.*
 class CertificateDB(
 
     @Column(name = "business_partner_number")
-    var businessPartnerNumber: String?,
+    var businessPartnerNumber: String,
 
     @ManyToOne
     @JoinColumn(name = "certificate_type_id", nullable = false)

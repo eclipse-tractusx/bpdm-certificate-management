@@ -33,7 +33,7 @@ object CertificateTestValues {
     )
 
     val certificateDocumentRequest =  CertificateDocumentRequestDto(
-        businessPartnerNumber = "BPNL_001",
+        businessPartnerNumber = "BPNL00000001TEST",
         type = certificateType,
         registrationNumber = "RegistrationNumber01",
         areaOfApplication = "AreaTest01",
@@ -41,15 +41,15 @@ object CertificateTestValues {
         enclosedSites = emptyList(),
         validFrom = null,
         validUntil = null,
-        issuer = "BPNS_001",
+        issuer = "BPNL00000001TEST",
         trustLevel = TrustLevelType.None,
-        validator = TrustValidatorDto("NameTest01", "BPNS_001"),
-        uploader = "BPNL_001",
+        validator = TrustValidatorDto("NameTest01", "BPNL00000001TEST"),
+        uploader = "BPNL00000001TEST",
         document = DocumentDto("RandomValue", FileType.PDF)
     )
 
     val certificateResponse = CertificateResponseDto(
-        businessPartnerNumber = "BPNL_001",
+        businessPartnerNumber = "BPNL00000001TEST",
         type = certificateType,
         registrationNumber = "RegistrationNumber01",
         areaOfApplication = "AreaTest01",
@@ -57,16 +57,16 @@ object CertificateTestValues {
         enclosedSites = emptyList(),
         validFrom = null,
         validUntil = null,
-        issuer = "BPNS_001",
+        issuer = "BPNL00000001TEST",
         trustLevel = TrustLevelType.None,
-        validator = TrustValidatorDto("NameTest01", "BPNS_001"),
-        uploader = "BPNL_001",
+        validator = TrustValidatorDto("NameTest01", "BPNL00000001TEST"),
+        uploader = "BPNL00000001TEST",
         createdAt = Instant.now(),
         updatedAt = Instant.now()
     )
 
     val bpnCertifiedCertificateResponse = BpnCertifiedCertificateResponse(
-        businessPartnerNumber = "BPNL_001",
+        businessPartnerNumber = "BPNL00000001TEST",
         isCertified = true,
         validUntil = null,
         trustLevel = TrustLevelType.None,
