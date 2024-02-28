@@ -109,4 +109,14 @@ class CertificateControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse)
     }
 
+    @ExceptionHandler(InvalidSiteFormatException::class)
+    fun handleInvalidSiteOrAddressBpnFormat(ex: InvalidSiteFormatException, request: WebRequest): ResponseEntity<CustomErrorResponse> {
+        val errorResponse = CustomErrorResponse(
+            timestamp = ZonedDateTime.now(),
+            status = HttpStatus.BAD_REQUEST,
+            error = ex.message.toString(),
+            path = request.getDescription(false)
+        )
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse)
+    }
 }
