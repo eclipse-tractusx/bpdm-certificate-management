@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.8</version>
+        <version>3.2.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -37,7 +37,7 @@
     <properties>
         <java.version>17</java.version>
         <kotlin.version>1.8.22</kotlin.version>
-        <springdoc.version>2.0.0</springdoc.version>
+        <springdoc.version>2.1.0</springdoc.version>
         <kotlinlogging.version>2.1.23</kotlinlogging.version>
         <testcontainers.version>1.18.3</testcontainers.version>
     </properties>

@@ -19,6 +19,8 @@
 
 package org.eclipse.tractusx.bpdmcertificatemanagement.config
 
+import org.eclipse.tractusx.bpdmcertificatemanagement.client.CertificateClientImpl
+import org.eclipse.tractusx.bpdmcertificatemanagement.client.CertificateManagementApiClient
 import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -28,7 +30,7 @@ import org.springframework.web.reactive.function.client.WebClient
 class CertificateClientConfig {
 
     @Bean
-    fun certificateClient(webServerAppCtxt: ServletWebServerApplicationContext): CertificateClient {
+    fun certificateClient(webServerAppCtxt: ServletWebServerApplicationContext): CertificateManagementApiClient {
         return CertificateClientImpl { WebClient.create("http://localhost:${webServerAppCtxt.webServer.port}") }
     }
 
