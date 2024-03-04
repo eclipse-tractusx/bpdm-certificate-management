@@ -19,10 +19,7 @@
 
 package org.eclipse.tractusx.bpdmcertificatemanagement.service
 
-import org.eclipse.tractusx.bpdmcertificatemanagement.dto.CertificateTypeDto
-import org.eclipse.tractusx.bpdmcertificatemanagement.dto.DocumentDto
-import org.eclipse.tractusx.bpdmcertificatemanagement.dto.EnclosedSiteDto
-import org.eclipse.tractusx.bpdmcertificatemanagement.dto.TrustValidatorDto
+import org.eclipse.tractusx.bpdmcertificatemanagement.dto.*
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.request.CertificateDocumentRequestDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.BpnCertifiedCertificateResponse
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.response.CertificateDocumentResponseDto
@@ -35,6 +32,10 @@ import java.time.ZonedDateTime
 class CertificateMapping {
 
     fun toCertificateDB(dto: CertificateDocumentRequestDto, certificateType: CertificateTypeDB): CertificateDB {
+
+        val validFromValue = toDefaultMappingValidFrom(dto.validFrom)
+        val validUntilValue = toDefaultMappingValidUntil(dto.validUntil)
+
         return CertificateDB(
             businessPartnerNumber = dto.businessPartnerNumber,
             type = certificateType,
@@ -42,14 +43,32 @@ class CertificateMapping {
             areaOfApplication = dto.areaOfApplication,
             remark = dto.remark,
             enclosedSites = dto.enclosedSites?.mapNotNull { toEnclosedSitesDB(it) }?.toSortedSet(),
-            validFrom = toDefaultMappingValidFrom(dto.validFrom),
-            validUntil = toDefaultMappingValidUntil(dto.validUntil),
+            validFrom = validFromValue,
+            validUntil = validUntilValue,
             issuer = dto.issuer,
             trustLevel = dto.trustLevel,
             validator = dto.validator?.let { toTrustValidatorDB(it) },
             uploader = dto.uploader,
-            document = toDocumentDB(dto.document)
+            document = toDocumentDB(dto.document),
+            status = setPrimaryStatus(validFromValue, validUntilValue)
         )
+    }
+
+    fun setPrimaryStatus(validFrom: ZonedDateTime, validUntil: ZonedDateTime): StatusType {
+
+        val currentDate = ZonedDateTime.now()
+
+        if(validUntil < currentDate) {
+            return StatusType.Inactive
+        }
+        if(validFrom > currentDate) {
+            return StatusType.Pending
+        }
+        if(validUntil >= currentDate) {
+            return StatusType.Active
+        }
+
+        return StatusType.NoTypeAssigned
     }
 
     private fun toEnclosedSitesDB(dto: EnclosedSiteDto) =
@@ -90,7 +109,8 @@ class CertificateMapping {
             documentID = entity.documentID,
             document = toDocumentDto(entity.document),
             createdAt = entity.createdAt,
-            updatedAt = entity.updatedAt
+            updatedAt = entity.updatedAt,
+            status = entity.status
         )
     }
 
