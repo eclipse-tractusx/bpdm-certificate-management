@@ -15,5 +15,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - KIT Documentation 
 - Trivy, Veracode, KICS, Sonarcloud workflows 
 - Helm Charts
-- Onboarding new BPDM-Certificate-Application 
+- Onboarding new BPDM-Certificate-Application
+- Updated copyright headers
 
