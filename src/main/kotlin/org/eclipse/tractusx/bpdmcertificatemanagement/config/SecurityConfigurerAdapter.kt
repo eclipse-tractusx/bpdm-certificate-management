@@ -31,7 +31,6 @@ class SecurityConfigurerAdapter(
 ) {
 
     fun configure(http: HttpSecurity) {
-        http.csrf { it.disable() }
         http.cors {}
         http.sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
         http.authorizeHttpRequests {
