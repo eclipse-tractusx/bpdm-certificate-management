@@ -28,6 +28,8 @@ bpdm-cert:
         host: localhost
     security:
         enabled: false
+    task:
+        status-checker: 0 0 0 * * ?
 
 management:
     endpoint:

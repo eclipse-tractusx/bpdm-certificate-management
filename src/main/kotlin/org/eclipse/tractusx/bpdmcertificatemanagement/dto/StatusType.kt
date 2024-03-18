@@ -16,16 +16,12 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
-package org.eclipse.tractusx.bpdmcertificatemanagement
 
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
-import org.springframework.scheduling.annotation.EnableScheduling
+package org.eclipse.tractusx.bpdmcertificatemanagement.dto
 
-@SpringBootApplication
-@EnableScheduling
-class Application
-
-fun main(args: Array<String>) {
-    runApplication<Application>(*args)
+enum class StatusType {
+    Active,
+    Inactive,
+    Pending,
+    NoTypeAssigned
 }

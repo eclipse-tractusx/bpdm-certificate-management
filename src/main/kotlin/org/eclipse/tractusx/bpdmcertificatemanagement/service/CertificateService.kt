@@ -30,10 +30,10 @@ import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateDB
 import org.eclipse.tractusx.bpdmcertificatemanagement.entity.CertificateTypeDB
 import org.eclipse.tractusx.bpdmcertificatemanagement.exception.*
 import org.eclipse.tractusx.bpdmcertificatemanagement.repository.CertificateRepository
-import org.eclipse.tractusx.bpdmcertificatemanagement.exception.*
 import org.eclipse.tractusx.bpdmcertificatemanagement.repository.CertificateTypeRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.http.ResponseEntity
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -218,5 +218,24 @@ class CertificateService(
             typeDto.certificateType
         )
     }
+
+    @Scheduled(cron = "\${bpdm-cert.task.status-checker}")
+    @Synchronized
+    fun StatusChecker() {
+
+        logger.debug { "Status check in progress" }
+
+        val certificates = certificateRepository.findAll()
+
+        certificates.forEach { certificate ->
+            val newStatus = certificateMapping.setPrimaryStatus(certificate.validFrom!!, certificate.validUntil!!)
+
+            if (certificate.status != newStatus) {
+                certificate.status = newStatus
+                certificateRepository.save(certificate)
+            }
+        }
+    }
+
 
 }

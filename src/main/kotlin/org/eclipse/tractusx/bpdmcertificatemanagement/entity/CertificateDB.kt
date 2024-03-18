@@ -20,6 +20,7 @@
 package org.eclipse.tractusx.bpdmcertificatemanagement.entity
 
 import jakarta.persistence.*
+import org.eclipse.tractusx.bpdmcertificatemanagement.dto.StatusType
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.TrustLevelType
 import java.time.ZonedDateTime
 import java.util.*
@@ -57,6 +58,10 @@ class CertificateDB(
     @Column(name = "valid_until")
     var validUntil: ZonedDateTime?,
 
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    var status: StatusType,
+
     @Column(name = "issuer")
     var issuer: String?,
 
@@ -77,4 +82,4 @@ class CertificateDB(
     @JoinColumn(name = "document_file_id", unique = true)
     var document: DocumentDB,
 
-): BaseEntity()
+    ): BaseEntity()

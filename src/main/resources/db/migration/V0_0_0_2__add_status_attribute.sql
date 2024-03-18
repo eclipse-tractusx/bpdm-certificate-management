@@ -1,0 +1,2 @@
+ALTER TABLE certificate ADD status VARCHAR2(255) NOT NULL DEFAULT 'Active';
+

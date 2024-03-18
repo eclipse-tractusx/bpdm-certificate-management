@@ -42,6 +42,7 @@ data class CertificateDocumentResponseDto(
     val uploader: String? = null,
     val documentID: UUID,
     val document: DocumentDto,
+    val status: StatusType,
 
     @get:Schema(description = CommonDescription.createdAt)
     val createdAt: Instant,
