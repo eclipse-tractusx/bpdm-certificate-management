@@ -61,6 +61,7 @@ object CertificateTestValues {
         trustLevel = TrustLevelType.None,
         validator = TrustValidatorDto("NameTest01", "BPNL00000001TEST"),
         uploader = "BPNL00000001TEST",
+        status = StatusType.Active,
         createdAt = Instant.now(),
         updatedAt = Instant.now()
     )
