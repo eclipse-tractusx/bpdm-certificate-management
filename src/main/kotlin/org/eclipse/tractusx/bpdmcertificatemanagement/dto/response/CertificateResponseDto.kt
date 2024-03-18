@@ -25,6 +25,7 @@ import org.eclipse.tractusx.bpdmcertificatemanagement.dto.EnclosedSiteDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.TrustLevelType
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.TrustValidatorDto
 import org.eclipse.tractusx.bpdmcertificatemanagement.dto.openapidescription.CommonDescription
+import org.eclipse.tractusx.bpdmcertificatemanagement.dto.StatusType
 import java.time.Instant
 import java.time.ZonedDateTime
 
@@ -41,6 +42,7 @@ data class CertificateResponseDto(
     val trustLevel: TrustLevelType,
     val validator: TrustValidatorDto? = null,
     val uploader: String? = null,
+    val status: StatusType,
 
     @get:Schema(description = CommonDescription.createdAt)
     val createdAt: Instant,
