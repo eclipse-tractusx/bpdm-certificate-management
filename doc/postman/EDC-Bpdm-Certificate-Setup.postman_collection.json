@@ -1,0 +1,610 @@
+{
+	"info": {
+		"_postman_id": "7ba48cbf-1ed0-4925-8e88-5019e3f79466",
+		"name": "EDC-Bpdm-Certificate-Setup",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26818013"
+	},
+	"item": [
+		{
+			"name": "Create Asset",
+			"item": [
+				{
+					"name": "metadata-controller",
+					"item": [
+						{
+							"name": "GET Certificate Type",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"@context\": {\n        \"@vocab\": \"{{EDC_NAMESPACE}}\",\n        \"dct\": \"https://purl.org/dc/terms/\",\n        \"cx-taxo\": \"https://w3id.org/catenax/taxonomy#\",\n        \"cx-common\": \"https://w3id.org/catenax/ontology/common#\"\n    },\n    \"@id\": \"{{ASSET_GET_CERTIFICATE_TYPE}}\",\n    \"properties\": {\n        \"dct:type\": {\n            \"@id\": \"cx-taxo:BPDMCertificate\"\n        },\n        \"dct:subject\": {\n            \"@id\": \"cx-taxo:ReadAccessCertificateForCatenaXMember\"\n        },\n        \"cx-common:version\": \"6.0\",\n        \"dct:description\": \"GET Certificate types ({{CERT_URL}}/ui/swagger-ui/index.html#/metadata-controller/getCertificateTypes)\",\n        \"company\": \"{{COMPANY_ID}}\"\n    },\n    \"dataAddress\": {\n        \"type\": \"HttpData\",\n        \"baseUrl\": \"{{CERT_URL}}/api/catena/certificate-types\",\n        \"oauth2:tokenUrl\": \"{{ASSET_TOKEN_URL}}\",\n        \"oauth2:clientId\": \"{{ASSET_CLIENT_ID}}\",\n        \"oauth2:clientSecretKey\": \"{{ASSET_CLIENT_SECRET}}\",\n        \"proxyQueryParams\": \"true\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PROVIDER_MANAGEMENT_URL_06}}/assets",
+									"host": [
+										"{{PROVIDER_MANAGEMENT_URL_06}}"
+									],
+									"path": [
+										"assets"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "POST Certificate Type",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"@context\": {\n        \"@vocab\": \"{{EDC_NAMESPACE}}\",\n        \"dct\": \"https://purl.org/dc/terms/\",\n        \"cx-taxo\": \"https://w3id.org/catenax/taxonomy#\",\n        \"cx-common\": \"https://w3id.org/catenax/ontology/common#\"\n    },\n    \"@id\": \"{{ASSET_POST_CERTIFICATE_TYPE}}\",\n    \"properties\": {\n        \"dct:type\": {\n            \"@id\": \"cx-taxo:BPDMCertificate\"\n        },\n        \"dct:subject\": {\n            \"@id\": \"cx-taxo:ReadAccessCertificateForCatenaXMember\"\n        },\n        \"cx-common:version\": \"6.0\",\n        \"description\": \"POST Certificate types ({{CERT_URL}}/ui/swagger-ui/index.html#/metadata-controller/setCertificateType)\",\n        \"company\": \"{{COMPANY_ID}}\"\n    },\n    \"dataAddress\": {\n        \"type\": \"HttpData\",\n        \"baseUrl\": \"{{CERT_URL}}/api/catena/certificate-types\",\n        \"oauth2:tokenUrl\": \"{{ASSET_TOKEN_URL}}\",\n        \"oauth2:clientId\": \"{{ASSET_CLIENT_ID}}\",\n        \"oauth2:clientSecretKey\": \"{{ASSET_CLIENT_SECRET}}\",\n        \"proxyQueryParams\": \"true\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PROVIDER_MANAGEMENT_URL_06}}/assets",
+									"host": [
+										"{{PROVIDER_MANAGEMENT_URL_06}}"
+									],
+									"path": [
+										"assets"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "certificate-controller",
+					"item": [
+						{
+							"name": "POST Certificate Document",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"@context\": {\n        \"@vocab\": \"{{EDC_NAMESPACE}}\",\n        \"dct\": \"https://purl.org/dc/terms/\",\n        \"cx-taxo\": \"https://w3id.org/catenax/taxonomy#\",\n        \"cx-common\": \"https://w3id.org/catenax/ontology/common#\"\n    },\n    \"@id\": \"{{ASSET_POST_CERTIFICATE_DOCUMENT}}\",\n    \"properties\": {\n        \"dct:type\": {\n            \"@id\": \"cx-taxo:BPDMCertificate\"\n        },\n        \"dct:subject\": {\n            \"@id\": \"cx-taxo:ReadAccessCertificateForCatenaXMember\"\n        },\n        \"cx-common:version\": \"6.0\",\n        \"description\": \"POST Certificate ({{CERT_URL}}/ui/swagger-ui/index.html#/certificate-controller/setCertificateDocument)\",\n        \"company\": \"{{COMPANY_ID}}\"\n    },\n    \"dataAddress\": {\n        \"type\": \"HttpData\",\n        \"baseUrl\": \"{{CERT_URL}}/api/catena/certificate/document\",\n        \"oauth2:tokenUrl\": \"{{ASSET_TOKEN_URL}}\",\n        \"oauth2:clientId\": \"{{ASSET_CLIENT_ID}}\",\n        \"oauth2:clientSecretKey\": \"{{ASSET_CLIENT_SECRET}}\",\n        \"proxyQueryParams\": \"true\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PROVIDER_MANAGEMENT_URL_06}}/assets",
+									"host": [
+										"{{PROVIDER_MANAGEMENT_URL_06}}"
+									],
+									"path": [
+										"assets"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET Certificate by BPN",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"@context\": {\n        \"@vocab\": \"{{EDC_NAMESPACE}}\",\n        \"dct\": \"https://purl.org/dc/terms/\",\n        \"cx-taxo\": \"https://w3id.org/catenax/taxonomy#\",\n        \"cx-common\": \"https://w3id.org/catenax/ontology/common#\"\n    },\n    \"@id\": \"{{ASSET_GET_CERTIFICATE_BY_BPN}}\",\n    \"properties\": {\n        \"dct:type\": {\n            \"@id\": \"cx-taxo:BPDMCertificate\"\n        },\n        \"dct:subject\": {\n            \"@id\": \"cx-taxo:ReadAccessCertificateForCatenaXMember\"\n        },\n        \"cx-common:version\": \"6.0\",\n        \"description\": \"GET Certificate by BPN ({{CERT_URL}}/ui/swagger-ui/index.html#/certificate-controller/getCertificatesByBpnPaginated)\",\n        \"company\": \"{{COMPANY_ID}}\"\n    },\n    \"dataAddress\": {\n        \"type\": \"HttpData\",\n        \"baseUrl\": \"{{CERT_URL}}/api/catena/certificate/{bpn}\",\n        \"oauth2:tokenUrl\": \"{{ASSET_TOKEN_URL}}\",\n        \"oauth2:clientId\": \"{{ASSET_CLIENT_ID}}\",\n        \"oauth2:clientSecretKey\": \"{{ASSET_CLIENT_SECRET}}\",\n        \"proxyQueryParams\": \"true\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PROVIDER_MANAGEMENT_URL_06}}/assets",
+									"host": [
+										"{{PROVIDER_MANAGEMENT_URL_06}}"
+									],
+									"path": [
+										"assets"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET Certificate by BPN And CertificateType",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"@context\": {\n        \"@vocab\": \"{{EDC_NAMESPACE}}\",\n        \"dct\": \"https://purl.org/dc/terms/\",\n        \"cx-taxo\": \"https://w3id.org/catenax/taxonomy#\",\n        \"cx-common\": \"https://w3id.org/catenax/ontology/common#\"\n    },\n    \"@id\": \"{{ASSET_GET_CERTIFICATE_BY_BPN_CERTIFICATE_TYPE}}\",\n    \"properties\": {\n        \"dct:type\": {\n            \"@id\": \"cx-taxo:BPDMCertificate\"\n        },\n        \"dct:subject\": {\n            \"@id\": \"cx-taxo:ReadAccessCertificateForCatenaXMember\"\n        },\n        \"cx-common:version\": \"6.0\",\n        \"description\": \"GET Certificate by BPN ({{CERT_URL}}/ui/swagger-ui/index.html#/certificate-controller/getCertificateByTypeAndBpnPaginated)\",\n        \"company\": \"{{COMPANY_ID}}\"\n    },\n    \"dataAddress\": {\n        \"type\": \"HttpData\",\n        \"baseUrl\": \"{{CERT_URL}}/api/catena/certificate/{bpn}/{certificateType}\",\n        \"oauth2:tokenUrl\": \"{{ASSET_TOKEN_URL}}\",\n        \"oauth2:clientId\": \"{{ASSET_CLIENT_ID}}\",\n        \"oauth2:clientSecretKey\": \"{{ASSET_CLIENT_SECRET}}\",\n        \"proxyQueryParams\": \"true\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PROVIDER_MANAGEMENT_URL_06}}/assets",
+									"host": [
+										"{{PROVIDER_MANAGEMENT_URL_06}}"
+									],
+									"path": [
+										"assets"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET Check Certificate by BPN And CertificateType",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"@context\": {\n        \"@vocab\": \"{{EDC_NAMESPACE}}\",\n        \"dct\": \"https://purl.org/dc/terms/\",\n        \"cx-taxo\": \"https://w3id.org/catenax/taxonomy#\",\n        \"cx-common\": \"https://w3id.org/catenax/ontology/common#\"\n    },\n    \"@id\": \"{{ASSET_GET_CHECK_CERTIFICATE_BY_BPN_CERTIFICATE_TYPE}}\",\n    \"properties\": {\n        \"dct:type\": {\n            \"@id\": \"cx-taxo:BPDMCertificate\"\n        },\n        \"dct:subject\": {\n            \"@id\": \"cx-taxo:ReadAccessCertificateForCatenaXMember\"\n        },\n        \"cx-common:version\": \"6.0\",\n        \"description\": \"GET Certificate by BPN ({{CERT_URL}}/ui/swagger-ui/index.html#/certificate-controller/checkCertificateByBpnAndType)\",\n        \"company\": \"{{COMPANY_ID}}\"\n    },\n    \"dataAddress\": {\n        \"type\": \"HttpData\",\n        \"baseUrl\": \"{{CERT_URL}}/api/catena/certificate/simple/{bpn}/{certificateType}\",\n        \"oauth2:tokenUrl\": \"{{ASSET_TOKEN_URL}}\",\n        \"oauth2:clientId\": \"{{ASSET_CLIENT_ID}}\",\n        \"oauth2:clientSecretKey\": \"{{ASSET_CLIENT_SECRET}}\",\n        \"proxyQueryParams\": \"true\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PROVIDER_MANAGEMENT_URL_06}}/assets",
+									"host": [
+										"{{PROVIDER_MANAGEMENT_URL_06}}"
+									],
+									"path": [
+										"assets"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET Certificate Document",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"@context\": {\n        \"@vocab\": \"{{EDC_NAMESPACE}}\",\n        \"dct\": \"https://purl.org/dc/terms/\",\n        \"cx-taxo\": \"https://w3id.org/catenax/taxonomy#\",\n        \"cx-common\": \"https://w3id.org/catenax/ontology/common#\"\n    },\n    \"@id\": \"{{ASSET_GET_CERTIFICATE_DOCUMENT}}\",\n    \"properties\": {\n        \"dct:type\": {\n            \"@id\": \"cx-taxo:BPDMCertificate\"\n        },\n        \"dct:subject\": {\n            \"@id\": \"cx-taxo:ReadAccessCertificateForCatenaXMember\"\n        },\n        \"cx-common:version\": \"6.0\",\n        \"description\": \"GET Certificate by BPN ({{CERT_URL}}/ui/swagger-ui/index.html#/certificate-controller/retrieveCertificateDocument)\",\n        \"company\": \"{{COMPANY_ID}}\"\n    },\n    \"dataAddress\": {\n        \"type\": \"HttpData\",\n        \"baseUrl\": \"{{CERT_URL}}/api/catena/certificate/document/{cdID}\",\n        \"oauth2:tokenUrl\": \"{{ASSET_TOKEN_URL}}\",\n        \"oauth2:clientId\": \"{{ASSET_CLIENT_ID}}\",\n        \"oauth2:clientSecretKey\": \"{{ASSET_CLIENT_SECRET}}\",\n        \"proxyQueryParams\": \"true\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{PROVIDER_MANAGEMENT_URL_06}}/assets",
+									"host": [
+										"{{PROVIDER_MANAGEMENT_URL_06}}"
+									],
+									"path": [
+										"assets"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Query Asset",
+			"item": [
+				{
+					"name": "GET Asset Query",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"@context\": {\n        \"@vocab\": \"{{EDC_NAMESPACE}}\"\n    },\n    \"@type\": \"QuerySpec\",\n    \"offset\": 0,\n    \"limit\": 100,\n    \"sortOrder\": \"DESC\",\n    \"sortField\": \"fieldName\",\n    \"filterExpression\": []\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{PROVIDER_MANAGEMENT_URL_06}}/assets/request",
+							"host": [
+								"{{PROVIDER_MANAGEMENT_URL_06}}"
+							],
+							"path": [
+								"assets",
+								"request"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Asset By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{PROVIDER_MANAGEMENT_URL_06}}/assets/{{ASSET_GET_CERTIFICATE_TYPE}}",
+							"host": [
+								"{{PROVIDER_MANAGEMENT_URL_06}}"
+							],
+							"path": [
+								"assets",
+								"{{ASSET_GET_CERTIFICATE_TYPE}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Asset",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{PROVIDER_MANAGEMENT_URL_06}}/assets/{{ASSET_GET_CERTIFICATE_TYPE}}",
+							"host": [
+								"{{PROVIDER_MANAGEMENT_URL_06}}"
+							],
+							"path": [
+								"assets",
+								"{{ASSET_GET_CERTIFICATE_TYPE}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Query Policy",
+			"item": [
+				{
+					"name": "GET Query",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"{{EDC_NAMESPACE}}\"\n  },\n  \"@type\": \"QuerySpec\",\n  \"offset\": 0,\n  \"limit\": 100,\n  \"sortOrder\": \"DESC\",\n  \"sortField\": \"fieldName\",\n  \"filterExpression\": []\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{PROVIDER_MANAGEMENT_URL}}/policydefinitions/request",
+							"host": [
+								"{{PROVIDER_MANAGEMENT_URL}}"
+							],
+							"path": [
+								"policydefinitions",
+								"request"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Policy BY ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{PROVIDER_MANAGEMENT_URL}}/policydefinitions/{{POLICY_ID}}",
+							"host": [
+								"{{PROVIDER_MANAGEMENT_URL}}"
+							],
+							"path": [
+								"policydefinitions",
+								"{{POLICY_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Policy",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{PROVIDER_MANAGEMENT_URL}}/policydefinitions/{{POLICY_ID}}",
+							"host": [
+								"{{PROVIDER_MANAGEMENT_URL}}"
+							],
+							"path": [
+								"policydefinitions",
+								"{{POLICY_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Query Contract Definition",
+			"item": [
+				{
+					"name": "GET Query",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"@context\": {\n    \"@vocab\": \"https://w3id.org/edc/v0.0.1/ns/\"\n  },\n  \"@type\": \"QuerySpec\",\n  \"offset\": 5,\n  \"limit\": 10,\n  \"sortOrder\": \"DESC\",\n  \"sortField\": \"fieldName\",\n  \"filterExpression\": []\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{PROVIDER_MANAGEMENT_URL}}/contractdefinitions/request",
+							"host": [
+								"{{PROVIDER_MANAGEMENT_URL}}"
+							],
+							"path": [
+								"contractdefinitions",
+								"request"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ContractDefinition BY ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{PROVIDER_MANAGEMENT_URL}}/contractdefinitions/{{CONTRACT_DEFINITION_ID}}",
+							"host": [
+								"{{PROVIDER_MANAGEMENT_URL}}"
+							],
+							"path": [
+								"contractdefinitions",
+								"{{CONTRACT_DEFINITION_ID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Contract Definition",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{PROVIDER_MANAGEMENT_URL}}/contractdefinitions/{{CONTRACT_DEFINITION_ID}}",
+							"host": [
+								"{{PROVIDER_MANAGEMENT_URL}}"
+							],
+							"path": [
+								"contractdefinitions",
+								"{{CONTRACT_DEFINITION_ID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create Policy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"@context\": {\n        \"odrl\": \"http://www.w3.org/ns/odrl/2/\"\n    },\n    \"@type\": \"PolicyDefinitionRequestDto\",\n    \"@id\": \"{{POLICY_ID}}\",\n    \"policy\": {\n\t\t\"@type\": \"Policy\",\n\t\t\"odrl:permission\" : [{\n\t\t\t\"odrl:action\" : \"USE\",\n\t\t\t\"odrl:constraint\" : {\n\t\t\t\t\"@type\": \"LogicalConstraint\",\n\t\t\t\t\"odrl:or\" : [{\n\t\t\t\t\t\"@type\" : \"Constraint\",\n\t\t\t\t\t\"odrl:leftOperand\" : \"BusinessPartnerNumber\",\n\t\t\t\t\t\"odrl:operator\" : {\n                        \"@id\": \"odrl:eq\"\n                    },\n\t\t\t\t\t\"odrl:rightOperand\" : \"{{BPNL_SHARING_MEMBER}}\"\n\t\t\t\t}]\n\t\t\t}\n\t\t}]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{PROVIDER_MANAGEMENT_URL}}/policydefinitions",
+					"host": [
+						"{{PROVIDER_MANAGEMENT_URL}}"
+					],
+					"path": [
+						"policydefinitions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Contract Definition",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"@context\": {},\n    \"@id\": \"{{CONTRACT_DEFINITION_ID}}\",\n    \"@type\": \"ContractDefinition\",\n    \"accessPolicyId\": \"{{ACCESS_POLICY_ID}}\",\n    \"contractPolicyId\": \"{{CONTRACT_POLICY_ID}}\",\n    \"assetsSelector\": {\n        \"@type\": \"CriterionDto\",\n        \"operandLeft\": \"{{EDC_NAMESPACE}}id\",\n        \"operator\": \"in\",\n        \"operandRight\": [\n            \"{{ASSET_GET_CERTIFICATE_TYPE}}\",\n            \"{{ASSET_POST_CERTIFICATE_TYPE}}\",\n            \"{{ASSET_POST_CERTIFICATE_DOCUMENT}}\",\n            \"{{ASSET_GET_CERTIFICATE_BY_BPN}}\",\n            \"{{ASSET_GET_CERTIFICATE_BY_BPN_CERTIFICATE_TYPE}}\",\n            \"{{ASSET_GET_CHECK_CERTIFICATE_BY_BPN_CERTIFICATE_TYPE}}\",\n            \"{{ASSET_GET_CERTIFICATE_DOCUMENT}}\"\n        ]\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{PROVIDER_MANAGEMENT_URL}}/contractdefinitions",
+					"host": [
+						"{{PROVIDER_MANAGEMENT_URL}}"
+					],
+					"path": [
+						"contractdefinitions"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{API-KEY}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "X-Api-Key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "API-KEY",
+			"value": "api-key",
+			"type": "string"
+		},
+		{
+			"key": "PROVIDER_MANAGEMENT_URL",
+			"value": "https://gate-edc.int.demo.catena-x.net/management/v2",
+			"type": "string"
+		},
+		{
+			"key": "PROVIDER_MANAGEMENT_URL_06",
+			"value": "https://gate-edc.int.demo.catena-x.net/management/v3",
+			"type": "string"
+		},
+		{
+			"key": "PROVIDER_PROTOCOL_URL",
+			"value": "https://gate-edc.int.demo.catena-x.net/api/v1/dsp",
+			"type": "string"
+		},
+		{
+			"key": "EDC_NAMESPACE",
+			"value": "https://w3id.org/edc/v0.0.1/ns/",
+			"type": "string"
+		},
+		{
+			"key": "CERT_URL",
+			"value": "https://business-partners-certificate.int.demo.catena-x.net/test-certificate",
+			"type": "string"
+		},
+		{
+			"key": "ASSET_TOKEN_URL",
+			"value": "https://centralidp.int.demo.catena-x.net/auth/realms/CX-Central",
+			"type": "string"
+		},
+		{
+			"key": "ASSET_CLIENT_ID",
+			"value": "sa-cl7-cx-7",
+			"type": "string"
+		},
+		{
+			"key": "ASSET_CLIENT_SECRET",
+			"value": "dev/edc/gate/CLIENT_SECRET",
+			"type": "string"
+		},
+		{
+			"key": "BPNL_SHARING_MEMBER",
+			"value": "BPNL00000007RWSM",
+			"type": "string"
+		},
+		{
+			"key": "CONTRACT_DEFINITION_ID",
+			"value": "COMPANY_TEST_CERTIFICATES",
+			"type": "string"
+		},
+		{
+			"key": "COMPANY_ID",
+			"value": "TEST_CERTIFICATES",
+			"type": "string"
+		},
+		{
+			"key": "POLICY_ID",
+			"value": "HAS_MEMBER_BPN_CERT",
+			"type": "string"
+		},
+		{
+			"key": "ACCESS_POLICY_ID",
+			"value": "HAS_MEMBER_BPN_CERT",
+			"type": "string"
+		},
+		{
+			"key": "CONTRACT_POLICY_ID",
+			"value": "HAS_MEMBER_BPN_CERT",
+			"type": "string"
+		},
+		{
+			"key": "ASSET_GET_CERTIFICATE_TYPE",
+			"value": "GET_CERTIFICATE_TYPE_1",
+			"type": "string"
+		},
+		{
+			"key": "ASSET_POST_CERTIFICATE_TYPE",
+			"value": "POST_CERTIFICATE_TYPE",
+			"type": "string"
+		},
+		{
+			"key": "ASSET_POST_CERTIFICATE_DOCUMENT",
+			"value": "POST_CERTIFICATE_DOCUMENT",
+			"type": "string"
+		},
+		{
+			"key": "ASSET_GET_CERTIFICATE_BY_BPN",
+			"value": "GET_CERTIFICATE_BY_BPN",
+			"type": "string"
+		},
+		{
+			"key": "ASSET_GET_CERTIFICATE_BY_BPN_CERTIFICATE_TYPE",
+			"value": "GET_CERTIFICATE_BY_BPN_CERTIFICATE_TYPE",
+			"type": "string"
+		},
+		{
+			"key": "ASSET_GET_CHECK_CERTIFICATE_BY_BPN_CERTIFICATE_TYPE",
+			"value": "GET_CHECK_CERTIFICATE_BY_BPN_CERTIFICATE_TYPE",
+			"type": "string"
+		},
+		{
+			"key": "ASSET_GET_CERTIFICATE_DOCUMENT",
+			"value": "GET_CERTIFICATE_DOCUMENT",
+			"type": "string"
+		}
+	]
+}
