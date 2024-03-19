@@ -128,6 +128,7 @@ class CertificateMapping {
             trustLevel = entity.trustLevel,
             validator = entity.validator?.let { toTrustValidatorDto(it) },
             uploader = entity.uploader,
+            status = entity.status,
             createdAt = entity.createdAt,
             updatedAt = entity.updatedAt
         )
