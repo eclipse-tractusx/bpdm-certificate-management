@@ -16,7 +16,7 @@ Eclipse Tractus-X product(s) installed within the image:
 
 **Used base image**
 
-- [eclipse-temurin:17-jre-alpine](https://github.com/adoptium/containers)
+- [eclipse-temurin:21-jre-alpine](https://github.com/adoptium/containers)
 - Official Eclipse Temurin DockerHub page: https://hub.docker.com/_/eclipse-temurin
 - Eclipse Temurin Project: https://projects.eclipse.org/projects/adoptium.temurin
 - Additional information about the Eclipse Temurin images: https://github.com/docker-library/repo-info/tree/master/repos/eclipse-temurin
@@ -32,6 +32,6 @@ As for any pre-built image usage, it is the image user's responsibility to ensur
 This work is licensed under the [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0).
 
 - SPDX-License-Identifier: Apache-2.0
-- SPDX-FileCopyrightText: 2023,2023 Mercedes Benz Group
-- SPDX-FileCopyrightText: 2023,2023 Contributors to the Eclipse Foundation
+- SPDX-FileCopyrightText: 2023,2024 Mercedes Benz Group
+- SPDX-FileCopyrightText: 2023,2024 Contributors to the Eclipse Foundation
 - Source URL: https://github.com/eclipse-tractusx/bpdm-certificate-management

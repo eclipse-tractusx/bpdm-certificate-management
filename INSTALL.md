@@ -12,7 +12,7 @@ To run the project first you need to install it from the parent pom. For that go
 ### Prerequisites
 
 * Maven
-* JDK17
+* JDK21
 
 
 ## NOTICE
