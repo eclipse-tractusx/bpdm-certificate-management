@@ -1,9 +1,9 @@
-FROM maven:3.8.7-eclipse-temurin-17 AS build
+FROM maven:3.9-eclipse-temurin-21-alpine AS build
 COPY . /home/app
 WORKDIR /home/app
 RUN mvn clean package -DskipTests
 
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
 # Adding wget for the health check
 RUN apk --no-cache add wget
 COPY --from=build /home/app/target/bpdm-certificate-management.jar /usr/local/lib/bpdmCertificate/app.jar
