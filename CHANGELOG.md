@@ -18,3 +18,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Onboarding new BPDM-Certificate-Application
 - Updated copyright headers
 
+### Changed
+
+- Fix vulnerability found upgrade spring boot version to 3.2.3
