@@ -108,7 +108,7 @@ startupProbe:
     path: "/actuator/health/readiness"
     port: 8086
     scheme: HTTP
-  initialDelaySeconds: 60
+  initialDelaySeconds: 80
   failureThreshold: 20
   periodSeconds: 15
 

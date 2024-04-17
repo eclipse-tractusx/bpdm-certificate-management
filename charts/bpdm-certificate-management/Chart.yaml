@@ -22,13 +22,13 @@ apiVersion: v2
 type: application
 name: bpdm-certificate-management
 appVersion: "1.0.1-alpha.1"
-version: 1.0.1-alpha.2
+version: 1.0.1-alpha.3
 description: A Helm chart for deploying the BPDM Certificate Management application
 sources:
   - https://github.com/eclipse-tractusx/bpdm-certificate-management
 dependencies:
   - name: postgresql
-    version: 11.9.13
+    version: 12.12.10
     repository: https://charts.bitnami.com/bitnami
     alias: postgres
     condition: postgres.enabled
