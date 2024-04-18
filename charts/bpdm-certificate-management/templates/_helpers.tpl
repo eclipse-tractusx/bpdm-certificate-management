@@ -79,7 +79,7 @@ Create name of application secret
 Determine postgres service/host name to connect to
 */}}
 {{- define "bpdm-certificate-management.postgresDependency" -}}
-        {{- include "includeWithPostgresContext" (list $ "postgresql.primary.fullname") }}
+        {{- include "includeWithPostgresContext" (list $ "postgresql.v1.primary.fullname") }}
 {{- end }}}
 
 
