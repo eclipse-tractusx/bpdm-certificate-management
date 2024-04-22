@@ -1,0 +1,317 @@
+{
+	"info": {
+		"_postman_id": "9ca94ffe-0d25-4781-b6ec-d66e684f1188",
+		"name": "EDC-BPDM-Certificate-test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26818013"
+	},
+	"item": [
+		{
+			"name": "Query Catalog",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"@context\": {\r\n        \"@vocab\": \"{{EDC_NAMESPACE}}\"\r\n    },\r\n    \"@type\": \"CatalogRequest\",\r\n    \"counterPartyAddress\": \"{{PROVIDER_PROTOCOL_URL}}\",\r\n    \"counterPartyId\": \"{{PROVIDER_ID}}\",\r\n    \"protocol\": \"dataspace-protocol-http\",\r\n    \"querySpec\": {\r\n        \"offset\": 0,\r\n        \"limit\": 100,\r\n        \"sortOrder\": \"DESC\",\r\n        \"sortField\": \"fieldName\",\r\n        \"filterExpression\": []\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{CONSUMER_MANAGEMENT_URL}}/catalog/request",
+					"host": [
+						"{{CONSUMER_MANAGEMENT_URL}}"
+					],
+					"path": [
+						"catalog",
+						"request"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query Dataset Catalog",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"@context\": {\r\n    \"@vocab\": \"{{EDC_NAMESPACE}}\"\r\n  },\r\n  \"@type\": \"DatasetRequest\",\r\n  \"@id\": \"{{ASSET_ID}}\",\r\n  \"counterPartyAddress\": \"{{PROVIDER_PROTOCOL_URL}}\",\r\n  \"counterPartyId\": \"{{PROVIDER_ID}}\",\r\n  \"protocol\": \"dataspace-protocol-http\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{CONSUMER_MANAGEMENT_URL}}/catalog/dataset/request",
+					"host": [
+						"{{CONSUMER_MANAGEMENT_URL}}"
+					],
+					"path": [
+						"catalog",
+						"dataset",
+						"request"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Initiate EDR Negotation",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"@context\": {\n\t\t\"odrl\": \"http://www.w3.org/ns/odrl/2/\"\n\t},\n\t\"@type\": \"NegotiationInitiateRequestDto\",\n\t\"counterPartyAddress\": \"{{PROVIDER_PROTOCOL_URL}}\",\n\t\"protocol\": \"dataspace-protocol-http\",\n\t\"counterPartyId\": \"{{PROVIDER_ID}}\",\n    \"providerId\": \"{{PROVIDER_ID}}\",\n\t\"offer\": {\n\t\t\"offerId\": \"Q09NUEFOWV9URVNUX0NFUlRJRklDQVRFUw==:R0VUX0NFUlRJRklDQVRFX1RZUEVfMw==:NTgzNDJmYzgtZjdjZS00YjJiLWIyNzEtYzlkOTI2YTJlMjli\",\n\t\t\"assetId\": \"{{ASSET_ID}}\",\n\t\t\"policy\": {\n\t\t\t\"@type\": \"odrl:Set\",\n\t\t\t\"odrl:permission\": {\n\t\t\t\t\"odrl:target\": \"{{ASSET_ID}}\",\n\t\t\t\t\"odrl:action\": {\n\t\t\t\t\t\"odrl:type\": \"USE\"\n\t\t\t\t},\n\t\t\t\t\"odrl:constraint\": {\n\t\t\t\t\t\"odrl:or\": {\n\t\t\t\t\t\t\"odrl:leftOperand\": \"BusinessPartnerNumber\",\n\t\t\t\t\t\t\"odrl:operator\": {\n                            \"@id\": \"odrl:eq\"\n                        },\n\t\t\t\t\t\t\"odrl:rightOperand\": \"{{BPNL_SHARING_MEMBER}}\"\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t\t\"odrl:prohibition\": [],\n\t\t\t\"odrl:obligation\": [],\n\t\t\t\"odrl:target\": \"{{ASSET_ID}}\"\n\t\t}\n\t}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{CONSUMER_MANAGEMENT}}/edrs",
+					"host": [
+						"{{CONSUMER_MANAGEMENT}}"
+					],
+					"path": [
+						"edrs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get contract negotiation by edr id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{CONSUMER_MANAGEMENT_URL}}/contractnegotiations/0931c44e-f818-4364-b1ac-e9b4032651cb",
+					"host": [
+						"{{CONSUMER_MANAGEMENT_URL}}"
+					],
+					"path": [
+						"contractnegotiations",
+						"0931c44e-f818-4364-b1ac-e9b4032651cb"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET EDR Negotation by ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{CONSUMER_MANAGEMENT}}/edrs?agreementId=7100ad5e-3986-40fc-ae7e-ee2d3b60e53f",
+					"host": [
+						"{{CONSUMER_MANAGEMENT}}"
+					],
+					"path": [
+						"edrs"
+					],
+					"query": [
+						{
+							"key": "providerId",
+							"value": "BPNL00000007RF54",
+							"disabled": true
+						},
+						{
+							"key": "assetId",
+							"value": "GET_CERTIFICATE_TYP",
+							"disabled": true
+						},
+						{
+							"key": "agreementId",
+							"value": "7100ad5e-3986-40fc-ae7e-ee2d3b60e53f"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query EDRs Cached Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{CONSUMER_MANAGEMENT}}/edrs/1df0c6ab-26cf-4618-824d-8267f9e6fca1",
+					"host": [
+						"{{CONSUMER_MANAGEMENT}}"
+					],
+					"path": [
+						"edrs",
+						"1df0c6ab-26cf-4618-824d-8267f9e6fca1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Public API",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "{{AUTH_CODE}}",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://gate-edc.int.demo.catena-x.net/api/public",
+					"protocol": "https",
+					"host": [
+						"gate-edc",
+						"int",
+						"demo",
+						"catena-x",
+						"net"
+					],
+					"path": [
+						"api",
+						"public"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{API-KEY}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "X-Api-Key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "API-KEY",
+			"value": "api-key",
+			"type": "string"
+		},
+		{
+			"key": "CONSUMER_MANAGEMENT_URL",
+			"value": "https://sharing-member-edc.int.demo.catena-x.net/management/v2",
+			"type": "string"
+		},
+		{
+			"key": "PROVIDER_PROTOCOL_URL",
+			"value": "https://gate-edc.int.demo.catena-x.net/api/v1/dsp",
+			"type": "string"
+		},
+		{
+			"key": "PROVIDER_MANAGEMENT_URL_06",
+			"value": "https://gate-edc.int.demo.catena-x.net/management/v3",
+			"type": "string"
+		},
+		{
+			"key": "PROVIDER_ID",
+			"value": "BPNL00000007RF54",
+			"type": "string"
+		},
+		{
+			"key": "BPNL_SHARING_MEMBER",
+			"value": "BPNL00000007RWSM",
+			"type": "string"
+		},
+		{
+			"key": "CONTRACT_POLICY_ID",
+			"value": "HAS_MEMBER_BPN_CERT",
+			"type": "string"
+		},
+		{
+			"key": "ASSET_ID",
+			"value": "GET_CERTIFICATE_TYPE_3",
+			"type": "string"
+		},
+		{
+			"key": "EDC_NAMESPACE",
+			"value": "https://w3id.org/edc/v0.0.1/ns/"
+		},
+		{
+			"key": "CONSUMER_MANAGEMENT",
+			"value": "https://sharing-member-edc.int.demo.catena-x.net/management",
+			"type": "string"
+		},
+		{
+			"key": "PROVIDER_PUBLIC_API",
+			"value": "https://gate-edc.int.demo.catena-x.net",
+			"type": "string"
+		},
+		{
+			"key": "AUTH_CODE",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
