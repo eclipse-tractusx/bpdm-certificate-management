@@ -23,9 +23,13 @@ more.
 
 * https://projects.eclipse.org/projects/automotive.tractusx/developer
 
-The project maintains the source code repositories in the following GitHub organization:
+Getting started:
 
-* https://github.com/eclipse-tractusx/
+* https://eclipse-tractusx.github.io/docs/developer
+
+The project maintains the source code repository
+
+* https://github.com/eclipse-tractusx/bpdm-certificate-management
 
 ## Eclipse Development Process
 
